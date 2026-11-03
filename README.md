@@ -103,8 +103,8 @@ what writes the three marts. Running `make notebook` and using marimo's
 **Run all** does the same thing interactively.
 
 The deck does not require `data/processed/` to exist: if the CSVs are missing it
-rebuilds the identical marts in memory from `data/raw/` in its own setup cell, so
-it can be opened and presented on a fresh clone.
+rebuilds the same marts in memory from `data/raw/` in its own setup cell, so it
+can be opened and presented on a fresh clone.
 
 ## Repository map
 
@@ -166,17 +166,17 @@ Eleven slides, 16:9, no vertical scrolling at the deck's width (`medium`,
 
 1. Title: *Does VIP create lasting customer loyalty?*
 2. Executive summary: four findings, one recommendation.
-3. Context: channel mix and where the money is.
+3. Context: *Two distinct products in one* — in-person vs online comparison.
 4. Retention framework: what "coming back" means, silence days and survival.
-5. Q1: future VIPs were already heavier shoppers (pre-launch comparison).
+5. Q1: VIP members spent and purchased more, full year and pre-launch views.
 6. Q1: within-user event study around enrolment.
-7. Q2: invitation experiment design and take-up.
-8. Q2: 16-week ITT outcomes (purchases, GMV, retention) with confidence intervals.
+7. Q2: *The invitation increased VIP enrollment* — baseline balance and take-up.
+8. Q2: *The invitation did not show a clear change in retention or spend* — 16-week ITT.
 9. Q3: channel economics and an illustrative online cross-sell scenario.
 10. Q3: deferred analyses and why they were deferred.
 11. Appendix: sources, lineage and the AI-assisted workflow.
 
-Every slide except 1, 2 and 11 owns its widgets: sliders and toggles named
+Every slide except 1, 2, 10 and 11 owns its widgets: sliders and toggles named
 `ui_sN_*` are read only by `slide_N`, so moving a control reruns one slide, not
 the deck. The slide counter badge in each header is a static `NN / 11`.
 
@@ -300,9 +300,9 @@ make check   # pytest tests/test_semantic.py, marimo check, ruff lint + format
 make test    # full pytest suite (20 tests)
 ```
 
-`make check` covers the semantic model, both notebooks in `notebooks/` that it
-lists, and ruff across the repository. The deck is linted and format-checked by
-the same ruff run; run marimo's own check on it with:
+`make check` covers the semantic model, the analysis workbook, the model viewer,
+and ruff lint plus format checks across the repository. The deck is linted and
+format-checked by the same ruff run; run marimo's own check on it with:
 
 ```bash
 uv run marimo check notebooks/vip_presentation.py
@@ -334,17 +334,19 @@ print('roundtrip:', MarimoConvert.from_py(src).to_py() == src)"
 
 - Raw files are never modified; every transformation is in notebook or script
   code, under version control.
-- SQL is used for joins and aggregations; Python only for tests and chart data.
-  No step depends on crosstab defaults, locale or file ordering: anything
-  ordered has an explicit `ORDER BY` or `sort`.
-- Money stays in NOK as `Decimal`-preserving floats read from CSV; percentages
-  and bps conversions are explicit (`bps / 10 000`).
+- SQL (DuckDB) does the joins and aggregations; pandas and scipy handle
+  statistics and chart data. Nothing depends on locale or file ordering:
+  anything ordered has an explicit `ORDER BY` or `sort`.
+- All values stay in NOK, read as floats; no currency conversion is applied.
+  Percentage and basis-point conversions are explicit (`bps / 10 000`).
 - Dates are parsed as datetimes; the analysis is cutoff-based, not
   timezone-based, so no timezone conversion is applied (documented in
   `data/README.md`).
 - The marts are deterministic given the raw CSVs, so re-running the notebook
-  regenerates byte-identical columns and row counts.
-- Exports (`reports/`, `site/`, `plots/`) are build artefacts, not sources.
+  regenerates the same columns and row counts.
+- `reports/`, `site/` and `plots/` are generated: `reports/` and `site/` are
+  rebuilt by `make export`, and `plots/` is committed so reviewers can read the
+  charts without running anything.
 
 ## AI-assisted workflow
 
