@@ -53,6 +53,7 @@ with app.setup(hide_code=True):
     .reveal .progress {
         color: #FF5B24;
     }
+
     </style>
     """
 
@@ -880,10 +881,10 @@ def slide_1():
         box-sizing: border-box;
         width: 100%;
         min-height: 540px;
-        padding: 34px 42px;
+        padding:clamp(20.4px, 2.528cqw, 34px) clamp(25.2px, 3.123cqw, 42px);
         background: #FFFAF7;
         color: #0B1F3A;
-        border-radius: 18px;
+        border-radius:clamp(10.8px, 1.338cqw, 18px);
         font-family: Inter, Arial, sans-serif;
         position: relative;
     }}
@@ -896,23 +897,23 @@ def slide_1():
         font-family: Inter, Arial, sans-serif;
     }}
     .vipps-accent {{
-        height: 7px;
+        height:clamp(6px, 0.520cqw, 7px);
         width: 100%;
-        margin-bottom: 25px;
+        margin-bottom:clamp(15px, 1.859cqw, 25px);
         background: #FF5B24;
-        border-radius: 8px;
+        border-radius:clamp(6px, 0.595cqw, 8px);
     }}
     .vipps-kicker {{
-        margin-bottom: 12px;
+        margin-bottom:clamp(7.2px, 0.892cqw, 12px);
         color: #FF5B24;
-        font-size: 12px;
+        font-size:clamp(7.2px, 0.892cqw, 12px);
         font-weight: 700;
         letter-spacing: 1.4px;
     }}
     .vipps-slide h1 {{
         margin: 0 0 12px;
         color: #0B1F3A;
-        font-size: 35px;
+        font-size:clamp(21px, 2.602cqw, 35px);
         font-weight: 700;
         line-height: 1.15;
         letter-spacing: -0.7px;
@@ -921,85 +922,109 @@ def slide_1():
         max-width: 760px;
         margin: 0 0 24px;
         color: #536174;
-        font-size: 16px;
+        font-size:clamp(9.6px, 1.190cqw, 16px);
         line-height: 1.5;
     }}
     .vipps-metrics {{
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 12px;
-        margin-bottom: 26px;
+        gap:clamp(7.2px, 0.892cqw, 12px);
+        margin-bottom:clamp(15.6px, 1.933cqw, 26px);
     }}
     .vipps-metric {{
-        padding: 15px 17px;
+        padding:clamp(9px, 1.115cqw, 15px) clamp(10.2px, 1.264cqw, 17px);
         background: #FFFFFF;
         border: 1px solid #E8E1DC;
         border-top: 3px solid #FF5B24;
-        border-radius: 12px;
+        border-radius:clamp(7.2px, 0.892cqw, 12px);
     }}
     .vipps-metric strong {{
         display: block;
-        margin-bottom: 6px;
+        margin-bottom:clamp(6px, 0.446cqw, 6px);
         color: #0B1F3A;
-        font-size: 26px;
+        font-size:clamp(15.6px, 1.933cqw, 26px);
         font-weight: 700;
         line-height: 1.2;
     }}
     .vipps-metric span {{
         color: #687487;
-        font-size: 12px;
+        font-size:clamp(7.2px, 0.892cqw, 12px);
         line-height: 1.35;
     }}
     .vipps-roadmap {{
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
+        gap:clamp(8.4px, 1.041cqw, 14px);
     }}
     .vipps-card {{
         min-height: 145px;
-        padding: 17px 18px;
+        padding:clamp(10.2px, 1.264cqw, 17px) clamp(10.8px, 1.338cqw, 18px);
         background: #FFFFFF;
         border: 1px solid #E8E1DC;
-        border-radius: 12px;
+        border-radius:clamp(7.2px, 0.892cqw, 12px);
     }}
     .vipps-card .number {{
         color: #FF5B24;
-        font-size: 11px;
+        font-size:clamp(6.6px, 0.818cqw, 11px);
         font-weight: 700;
         letter-spacing: 1px;
     }}
     .vipps-card h3 {{
         margin: 10px 0 8px;
         color: #0B1F3A;
-        font-size: 18px;
+        font-size:clamp(10.8px, 1.338cqw, 18px);
         font-weight: 700;
         line-height: 1.25;
     }}
     .vipps-card p {{
         margin: 0;
         color: #536174;
-        font-size: 13px;
+        font-size:clamp(7.8px, 0.967cqw, 13px);
         line-height: 1.5;
     }}
     .vipps-footer {{
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-top: 20px;
+        gap:clamp(6px, 0.743cqw, 10px);
+        margin-top:clamp(12px, 1.487cqw, 20px);
         color: #536174;
-        font-size: 12px;
+        font-size:clamp(7.2px, 0.892cqw, 12px);
     }}
+    /* Responsive layer -------------------------------------------------------
+       Slide type and spacing are expressed in clamp(px, cqw, px): the value is
+       the design size at the 1345px canvas and shrinks in step with the reveal
+       stage, which marimo sizes from the window width. Charts live in a shadow
+       host, so they are scaled by media query instead. */
+    .reveal .slides section [data-testid="slide-scroll-container"] {{
+        container-type: inline-size;
+    }}
+    @media (max-width: 1432px) {{
+        .mo-slide-content marimo-mime-renderer {{ zoom: 0.94; }}
+    }}
+    @media (max-width: 1359px) {{
+        .mo-slide-content marimo-mime-renderer {{ zoom: 0.87; }}
+    }}
+    @media (max-width: 1269px) {{
+        .mo-slide-content marimo-mime-renderer {{ zoom: 0.8; }}
+    }}
+    @media (max-width: 1179px) {{
+        .mo-slide-content marimo-mime-renderer {{ zoom: 0.74; }}
+    }}
+    @media (max-width: 1089px) {{
+        .mo-slide-content marimo-mime-renderer {{ zoom: 0.68; }}
+    }}
+
     .vipps-footer-mark {{
         flex: 0 0 auto;
         width: 6px;
-        height: 6px;
+        height:clamp(6px, 0.446cqw, 6px);
         background: #FF5B24;
         border-radius: 50%;
     }}
     </style>
 
     <div class="vipps-slide">
-    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">01<span style="color:#8C8C8C;"> / 11</span></div>
+    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">01<span style="color:#8C8C8C;"> / 11</span></div>
       <div class="vipps-accent"></div>
       <div class="vipps-kicker">VIPPS · CASE INTERVIEW</div>
 
@@ -1067,10 +1092,10 @@ def slide_2():
     .vipps-summary {{
         box-sizing: border-box;
         width: 100%;
-        padding: 30px 36px;
+        padding:clamp(18px, 2.230cqw, 30px) clamp(21.6px, 2.677cqw, 36px);
         background: #FFFAF7;
         color: #0B1F3A;
-        border-radius: 18px;
+        border-radius:clamp(10.8px, 1.338cqw, 18px);
         font-family: Inter, Arial, sans-serif;
         position: relative;
     }}
@@ -1082,15 +1107,15 @@ def slide_2():
         font-family: Inter, Arial, sans-serif;
     }}
     .vipps-summary-accent {{
-        height: 7px;
-        margin-bottom: 24px;
+        height:clamp(6px, 0.520cqw, 7px);
+        margin-bottom:clamp(14.4px, 1.784cqw, 24px);
         background: #FF5B24;
-        border-radius: 8px;
+        border-radius:clamp(6px, 0.595cqw, 8px);
     }}
     .vipps-summary-kicker {{
-        margin-bottom: 10px;
+        margin-bottom:clamp(6px, 0.743cqw, 10px);
         color: #FF5B24;
-        font-size: 12px;
+        font-size:clamp(7.2px, 0.892cqw, 12px);
         font-weight: 700;
         letter-spacing: 1.4px;
         text-transform: uppercase;
@@ -1099,7 +1124,7 @@ def slide_2():
         max-width: 850px;
         margin: 0 0 12px;
         color: #0B1F3A;
-        font-size: 30px;
+        font-size:clamp(18px, 2.230cqw, 30px);
         font-weight: 700;
         line-height: 1.2;
         letter-spacing: -0.7px;
@@ -1108,25 +1133,25 @@ def slide_2():
         max-width: 850px;
         margin: 0 0 24px;
         color: #536174;
-        font-size: 15px;
+        font-size:clamp(9px, 1.115cqw, 15px);
         line-height: 1.5;
     }}
     .vipps-summary-grid {{
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+        gap:clamp(8.4px, 1.041cqw, 14px);
     }}
     .vipps-summary-card {{
         min-width: 0;
-        padding: 19px 20px;
+        padding:clamp(11.4px, 1.413cqw, 19px) clamp(12px, 1.487cqw, 20px);
         background: #FFFFFF;
         border: 1px solid #E8E1DC;
-        border-radius: 12px;
+        border-radius:clamp(7.2px, 0.892cqw, 12px);
     }}
     .vipps-summary-card-label {{
-        margin-bottom: 10px;
+        margin-bottom:clamp(6px, 0.743cqw, 10px);
         color: #FF5B24;
-        font-size: 11px;
+        font-size:clamp(6.6px, 0.818cqw, 11px);
         font-weight: 700;
         letter-spacing: 1px;
         text-transform: uppercase;
@@ -1134,28 +1159,28 @@ def slide_2():
     .vipps-summary-card h2 {{
         margin: 0 0 8px;
         color: #0B1F3A;
-        font-size: 17px;
+        font-size:clamp(10.2px, 1.264cqw, 17px);
         font-weight: 700;
         line-height: 1.3;
     }}
     .vipps-summary-card p {{
         margin: 0;
         color: #536174;
-        font-size: 13px;
+        font-size:clamp(7.8px, 0.967cqw, 13px);
         font-weight: 400;
         line-height: 1.55;
     }}
     .vipps-summary-card ul {{
         margin: 7px 0 10px;
-        padding-left: 18px;
+        padding-left:clamp(10.8px, 1.338cqw, 18px);
         color: #536174;
         font-family: Inter, Arial, sans-serif;
-        font-size: 13px;
+        font-size:clamp(7.8px, 0.967cqw, 13px);
         font-weight: 400;
         line-height: 1.55;
     }}
     .vipps-summary-card li {{
-        margin-bottom: 4px;
+        margin-bottom:clamp(6px, 0.297cqw, 4px);
         font: inherit;
     }}
     .vipps-summary-card li:last-child {{
@@ -1171,12 +1196,12 @@ def slide_2():
         font-weight: 700;
     }}
     .vipps-summary-bottomline {{
-        margin-top: 18px;
-        padding: 13px 16px;
+        margin-top:clamp(10.8px, 1.338cqw, 18px);
+        padding:clamp(7.8px, 0.967cqw, 13px) clamp(9.6px, 1.190cqw, 16px);
         background: #0B1F3A;
         color: #FFFFFF;
-        border-radius: 12px;
-        font-size: 13px;
+        border-radius:clamp(7.2px, 0.892cqw, 12px);
+        font-size:clamp(7.8px, 0.967cqw, 13px);
         line-height: 1.5;
     }}
     .vipps-summary-bottomline strong {{
@@ -1186,7 +1211,7 @@ def slide_2():
     </style>
 
     <div class="vipps-summary">
-    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">02<span style="color:#8C8C8C;"> / 11</span></div>
+    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">02<span style="color:#8C8C8C;"> / 11</span></div>
         <div class="vipps-summary-accent"></div>
         <div class="vipps-summary-kicker">Executive summary</div>
 
@@ -1371,69 +1396,69 @@ def slide_3():
     <div style="
         background: #FFFFFF;
         border: 1px solid #F0E5DF;
-        border-radius: 14px;
-        padding: 20px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(12px, 1.487cqw, 20px);
         color: #0B1F3A;
         font-family: Inter, Arial, sans-serif;
     ">
         <div style="
             color: #FF5B24;
-            font-size: 11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight: 800;
             letter-spacing: 1px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            margin-bottom:clamp(6px, 0.595cqw, 8px);
         ">Channel comparison</div>
 
         <div style="
-            font-size: 18px;
+            font-size:clamp(10.8px, 1.338cqw, 18px);
             font-weight: 750;
-            margin-bottom: 14px;
+            margin-bottom:clamp(8.4px, 1.041cqw, 14px);
         ">Two distinct spending patterns</div>
 
         <table style="
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             line-height: 1.5;
         ">
             <thead>
                 <tr style="border-bottom: 1px solid #F0E5DF;">
-                    <th style="text-align: left; padding: 8px 4px; color: #526176;">Metric</th>
-                    <th style="text-align: right; padding: 8px 4px; color: #FF5B24;">In person</th>
-                    <th style="text-align: right; padding: 8px 4px; color: #2F6DB3;">Online</th>
+                    <th style="text-align: left; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #526176;">Metric</th>
+                    <th style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #FF5B24;">In person</th>
+                    <th style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #2F6DB3;">Online</th>
                 </tr>
             </thead>
             <tbody>
                 <tr style="border-bottom: 1px solid #F5EDE8;">
-                    <td style="padding: 8px 4px; color: #526176;">Active users</td>
-                    <td style="text-align: right; padding: 8px 4px;">{int(_in["users"]):,}</td>
-                    <td style="text-align: right; padding: 8px 4px;">{int(_on["users"]):,}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #526176;">Active users</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{int(_in["users"]):,}</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{int(_on["users"]):,}</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F5EDE8;">
-                    <td style="padding: 8px 4px; color: #526176;">Mean ticket</td>
-                    <td style="text-align: right; padding: 8px 4px;">{_in["ticket"]:,.0f} NOK</td>
-                    <td style="text-align: right; padding: 8px 4px;">{_on["ticket"]:,.0f} NOK</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #526176;">Mean ticket</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{_in["ticket"]:,.0f} NOK</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{_on["ticket"]:,.0f} NOK</td>
                 </tr>
                 <tr style="border-bottom: 1px solid #F5EDE8;">
-                    <td style="padding: 8px 4px; color: #526176;">Median ticket</td>
-                    <td style="text-align: right; padding: 8px 4px;">{_in["ticket_median"]:,.0f} NOK</td>
-                    <td style="text-align: right; padding: 8px 4px;">{_on["ticket_median"]:,.0f} NOK</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #526176;">Median ticket</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{_in["ticket_median"]:,.0f} NOK</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{_on["ticket_median"]:,.0f} NOK</td>
                 </tr>
                 <tr>
-                    <td style="padding: 8px 4px; color: #526176;">Take rate</td>
-                    <td style="text-align: right; padding: 8px 4px;">{_in["take_rate"]:.2f}%</td>
-                    <td style="text-align: right; padding: 8px 4px; color: #FF5B24; font-weight: 800;">{_on["take_rate"]:.2f}%</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #526176;">Take rate</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px);">{_in["take_rate"]:.2f}%</td>
+                    <td style="text-align: right; padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.297cqw, 4px); color: #FF5B24; font-weight: 800;">{_on["take_rate"]:.2f}%</td>
                 </tr>
             </tbody>
         </table>
 
         <div style="
-            margin-top: 16px;
-            padding: 14px;
+            margin-top:clamp(9.6px, 1.190cqw, 16px);
+            padding:clamp(8.4px, 1.041cqw, 14px);
             background: #FFFAF7;
-            border-radius: 10px;
-            font-size: 13px;
+            border-radius:clamp(6px, 0.743cqw, 10px);
+            font-size:clamp(7.8px, 0.967cqw, 13px);
             line-height: 1.55;
             color: #526176;
         ">
@@ -1456,28 +1481,28 @@ def slide_3():
             mo.Html("""
                 <div style="
                     background: #FFFAF7;position:relative;
-                    padding: 20px 24px 16px;
-                    border-radius: 16px;
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
                     font-family: Inter, Arial, sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">03<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">03<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height: 5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background: #FF5B24;
-                        border-radius: 8px;
-                        margin-bottom: 16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color: #FF5B24;
-                        font-size: 11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight: 800;
                         letter-spacing: 1.5px;
                         text-transform: uppercase;
-                        margin-bottom: 8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Channel economics</div>
                     <div style="
                         color: #0B1F3A;
-                        font-size: 26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height: 1.2;
                         font-weight: 800;
                         letter-spacing: -0.5px;
@@ -1629,29 +1654,29 @@ def slide_4():
     <div style="
         background:#FFFFFF;
         border:1px solid #E9E3DF;
-        border-radius:14px;
-        padding:18px 20px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(10.8px, 1.338cqw, 18px) clamp(12px, 1.487cqw, 20px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#526176;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             font-weight:600;
-            margin-bottom:7px;
+            margin-bottom:clamp(6px, 0.520cqw, 7px);
         ">No observed return by {_x} days</div>
 
         <div style="
             color:#FF5B24;
-            font-size:34px;
+            font-size:clamp(20.4px, 2.528cqw, 34px);
             line-height:1;
             font-weight:750;
         ">{_churn_pct:.0%}</div>
 
         <div style="
             color:#526176;
-            font-size:12px;
-            margin-top:8px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
+            margin-top:clamp(6px, 0.595cqw, 8px);
         ">Across {_n_spells:,} purchase spells</div>
 
         <div style="
@@ -1661,22 +1686,22 @@ def slide_4():
 
         <div style="
             color:#526176;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             font-weight:600;
-            margin-bottom:7px;
+            margin-bottom:clamp(6px, 0.520cqw, 7px);
         ">Users active within the {_win}-day window</div>
 
         <div style="
             color:#0B1F3A;
-            font-size:34px;
+            font-size:clamp(20.4px, 2.528cqw, 34px);
             line-height:1;
             font-weight:750;
         ">{_active_last:,}</div>
 
         <div style="
             color:#526176;
-            font-size:12px;
-            margin-top:8px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
+            margin-top:clamp(6px, 0.595cqw, 8px);
         ">Last purchase within {_win} days of year-end</div>
     </div>
     """
@@ -1685,73 +1710,73 @@ def slide_4():
     <div style="
         background:#FFFFFF;
         border:1px solid #E9E3DF;
-        border-radius:14px;
-        padding:16px 18px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(9.6px, 1.190cqw, 16px) clamp(10.8px, 1.338cqw, 18px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#FF5B24;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight:800;
             letter-spacing:1px;
             text-transform:uppercase;
-            margin-bottom:6px;
+            margin-bottom:clamp(6px, 0.446cqw, 6px);
         ">Retention framework</div>
 
         <div style="
-            font-size:16px;
+            font-size:clamp(9.6px, 1.190cqw, 16px);
             font-weight:750;
-            margin-bottom:12px;
+            margin-bottom:clamp(7.2px, 0.892cqw, 12px);
         ">Three layers of “keep coming back”</div>
 
         <div style="
             display:grid;
             grid-template-columns:repeat(3,minmax(0,1fr));
-            gap:14px;
+            gap:clamp(8.4px, 1.041cqw, 14px);
         ">
             <div>
-                <div style="font-size:12px;font-weight:750;color:#FF5B24;margin-bottom:5px;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);font-weight:750;color:#FF5B24;margin-bottom:clamp(6px, 0.372cqw, 5px);">
                     01 / SURVIVAL
                 </div>
-                <div style="font-size:13px;font-weight:700;margin-bottom:4px;">
+                <div style="font-size:clamp(7.8px, 0.967cqw, 13px);font-weight:700;margin-bottom:clamp(6px, 0.297cqw, 4px);">
                     Recent activity
                 </div>
-                <div style="font-size:12px;line-height:1.5;color:#526176;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                     Purchased within the selected survival window.
                 </div>
             </div>
 
             <div>
-                <div style="font-size:12px;font-weight:750;color:#FF5B24;margin-bottom:5px;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);font-weight:750;color:#FF5B24;margin-bottom:clamp(6px, 0.372cqw, 5px);">
                     02 / CADENCE
                 </div>
-                <div style="font-size:13px;font-weight:700;margin-bottom:4px;">
+                <div style="font-size:clamp(7.8px, 0.967cqw, 13px);font-weight:700;margin-bottom:clamp(6px, 0.297cqw, 4px);">
                     Expected frequency
                 </div>
-                <div style="font-size:12px;line-height:1.5;color:#526176;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                     Weekly in-person and monthly online activity.
                 </div>
             </div>
 
             <div>
-                <div style="font-size:12px;font-weight:750;color:#FF5B24;margin-bottom:5px;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);font-weight:750;color:#FF5B24;margin-bottom:clamp(6px, 0.372cqw, 5px);">
                     03 / SPEND
                 </div>
-                <div style="font-size:13px;font-weight:700;margin-bottom:4px;">
+                <div style="font-size:clamp(7.8px, 0.967cqw, 13px);font-weight:700;margin-bottom:clamp(6px, 0.297cqw, 4px);">
                     Customer value
                 </div>
-                <div style="font-size:12px;line-height:1.5;color:#526176;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                     Purchase frequency and GMV.
                 </div>
             </div>
         </div>
 
         <div style="
-            margin-top:12px;
-            padding-top:10px;
+            margin-top:clamp(7.2px, 0.892cqw, 12px);
+            padding-top:clamp(6px, 0.743cqw, 10px);
             border-top:1px solid #E9E3DF;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             line-height:1.45;
             color:#526176;
         ">
@@ -1776,28 +1801,28 @@ def slide_4():
             mo.Html("""
                 <div style="
                     background:#FFFAF7;position:relative;
-                    padding:20px 24px 16px;
-                    border-radius:16px;
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">04<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">04<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Defining retention</div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -1908,54 +1933,54 @@ def slide_5():
 
         return f"""
         <div style="
-            background:#FFFFFF; border:1px solid #F0E5DF; border-radius:14px;
-            padding:20px; color:#0B1F3A; font-family:Inter,Arial,sans-serif;
+            background:#FFFFFF; border:1px solid #F0E5DF; border-radius:clamp(8.4px, 1.041cqw, 14px);
+            padding:clamp(12px, 1.487cqw, 20px); color:#0B1F3A; font-family:Inter,Arial,sans-serif;
         ">
             <div style="
-                color:#526176; font-size:11px; font-weight:800;
-                letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;
+                color:#526176; font-size:clamp(6.6px, 0.818cqw, 11px); font-weight:800;
+                letter-spacing:1px; text-transform:uppercase; margin-bottom:clamp(6px, 0.595cqw, 8px);
             ">{title}</div>
 
             <div style="
-                font-size:30px; line-height:1.1; font-weight:800;
-                color:#FF5B24; margin-bottom:4px;
+                font-size:clamp(18px, 2.230cqw, 30px); line-height:1.1; font-weight:800;
+                color:#FF5B24; margin-bottom:clamp(6px, 0.297cqw, 4px);
             ">{ratio:.2f}×</div>
 
-            <div style="font-size:12px; color:#526176; margin-bottom:4px;">
+            <div style="font-size:clamp(7.2px, 0.892cqw, 12px); color:#526176; margin-bottom:clamp(6px, 0.297cqw, 4px);">
                 {_comparison_label}
             </div>
 
-            <div style="font-size:11px; color:#526176; margin-bottom:16px;">
+            <div style="font-size:clamp(6.6px, 0.818cqw, 11px); color:#526176; margin-bottom:clamp(9.6px, 1.190cqw, 16px);">
                 N={n_vip} vs. N={n_never} ·
                 Welch t-test p = {p_value:.3f}
             </div>
 
-            <div style="font-size:12px; color:#526176; margin-bottom:5px;">
+            <div style="font-size:clamp(7.2px, 0.892cqw, 12px); color:#526176; margin-bottom:clamp(6px, 0.372cqw, 5px);">
                 Never-VIP
                 <span style="float:right; color:#0B1F3A; font-weight:700;">
                     {fmt.format(never_value)} {unit}
                 </span>
             </div>
             <div style="
-                height:10px; background:#E8EDF3; border-radius:999px;
-                margin-bottom:14px;
+                height:clamp(6px, 0.743cqw, 10px); background:#E8EDF3; border-radius:clamp(599.4px, 74.275cqw, 999px);
+                margin-bottom:clamp(8.4px, 1.041cqw, 14px);
             ">
                 <div style="
-                    width:{_never_width:.1f}%; height:10px;
-                    background:#2F6DB3; border-radius:999px;
+                    width:{_never_width:.1f}%; height:clamp(6px, 0.743cqw, 10px);
+                    background:#2F6DB3; border-radius:clamp(599.4px, 74.275cqw, 999px);
                 "></div>
             </div>
 
-            <div style="font-size:12px; color:#526176; margin-bottom:5px;">
+            <div style="font-size:clamp(7.2px, 0.892cqw, 12px); color:#526176; margin-bottom:clamp(6px, 0.372cqw, 5px);">
                 {_vip_label}
                 <span style="float:right; color:#FF5B24; font-weight:700;">
                     {fmt.format(vip_value)} {unit}
                 </span>
             </div>
-            <div style="height:10px; background:#F0E5DF; border-radius:999px;">
+            <div style="height:clamp(6px, 0.743cqw, 10px); background:#F0E5DF; border-radius:clamp(599.4px, 74.275cqw, 999px);">
                 <div style="
-                    width:{_vip_width:.1f}%; height:10px;
-                    background:#FF5B24; border-radius:999px;
+                    width:{_vip_width:.1f}%; height:clamp(6px, 0.743cqw, 10px);
+                    background:#FF5B24; border-radius:clamp(599.4px, 74.275cqw, 999px);
                 "></div>
             </div>
         </div>
@@ -1990,26 +2015,26 @@ def slide_5():
             mo.hstack([ui_s5_cohort], gap=1.5, align="center"),
             mo.Html(f"""
                 <div style="
-                    background:#FFFAF7;position:relative; padding:20px 24px 16px;
-                    border-radius:16px; font-family:Inter,Arial,sans-serif;
+                    background:#FFFAF7;position:relative; padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
+                    border-radius:clamp(9.6px, 1.190cqw, 16px); font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">05<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">05<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px; background:#FF5B24; border-radius:8px;
-                        margin-bottom:16px;
+                        height:clamp(6px, 0.372cqw, 5px); background:#FF5B24; border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
-                        color:#FF5B24; font-size:11px; font-weight:800;
+                        color:#FF5B24; font-size:clamp(6.6px, 0.818cqw, 11px); font-weight:800;
                         letter-spacing:1.5px; text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">{_period_label}</div>
                     <div style="
-                        color:#0B1F3A; font-size:26px; line-height:1.2;
+                        color:#0B1F3A; font-size:clamp(15.6px, 1.933cqw, 26px); line-height:1.2;
                         font-weight:800; letter-spacing:-0.5px;
                     ">{_headline}</div>
                     <div style="
-                        color:#526176; font-size:14px; line-height:1.5;
-                        margin-top:10px;
+                        color:#526176; font-size:clamp(8.4px, 1.041cqw, 14px); line-height:1.5;
+                        margin-top:clamp(6px, 0.743cqw, 10px);
                     ">{_description}</div>
                 </div>
             """),
@@ -2021,9 +2046,9 @@ def slide_5():
             mo.Html(f"""
                 <div style="
                     background:#FFFFFF; border:1px solid #F0E5DF;
-                    border-radius:14px; padding:18px 20px;
+                    border-radius:clamp(8.4px, 1.041cqw, 14px); padding:clamp(10.8px, 1.338cqw, 18px) clamp(12px, 1.487cqw, 20px);
                     color:#526176; font-family:Inter,Arial,sans-serif;
-                    font-size:13px; line-height:1.6;
+                    font-size:clamp(7.8px, 0.967cqw, 13px); line-height:1.6;
                 ">
                     <strong style="color:#0B1F3A;">How to interpret this:</strong>
                     {_interpretation}
@@ -2096,32 +2121,32 @@ def slide_6():
     <div style="
         background:#FFFFFF;
         border:1px solid #F0E5DF;
-        border-radius:14px;
-        padding:14px 16px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#FF5B24;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight:800;
             letter-spacing:1px;
             text-transform:uppercase;
-            margin-bottom:8px;
+            margin-bottom:clamp(6px, 0.595cqw, 8px);
         ">Before vs. after enrollment</div>
         <table style="
             width:100%;
             border-collapse:collapse;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             line-height:1.4;
         ">
             <thead>
                 <tr style="text-align:left;background:#FFFAF7;">
-                    <th style="padding:8px 6px;">Metric</th>
-                    <th style="padding:8px 6px;">Before</th>
-                    <th style="padding:8px 6px;">After</th>
-                    <th style="padding:8px 6px;">Change</th>
-                    <th style="padding:8px 6px;">p-value</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">Metric</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">Before</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">After</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">Change</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">p-value</th>
                 </tr>
             </thead>
             <tbody>
@@ -2129,15 +2154,15 @@ def slide_6():
         + "".join(
             f"""
                 <tr style="border-top:1px solid #F0E5DF;">
-                    <td style="padding:8px 6px;font-weight:700;">{_r["metric"]}</td>
-                    <td style="padding:8px 6px;">{_fmt(_r["pre"], _measures[_r["metric"]][1])}</td>
-                    <td style="padding:8px 6px;">{_fmt(_r["post"], _measures[_r["metric"]][1])}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);font-weight:700;">{_r["metric"]}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">{_fmt(_r["pre"], _measures[_r["metric"]][1])}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">{_fmt(_r["post"], _measures[_r["metric"]][1])}</td>
                     <td style="
-                        padding:8px 6px;
+                        padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);
                         color:{"#FF5B24" if _r["change"] >= 0 else "#2F6DB3"};
                         font-weight:700;
                     ">{_r["change"]:+.1f}%</td>
-                    <td style="padding:8px 6px;">{_r["p"]:.3f}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">{_r["p"]:.3f}</td>
                 </tr>
         """
             for _r in _table.to_dict(orient="records")
@@ -2254,28 +2279,28 @@ def slide_6():
             mo.Html("""
                 <div style="
                     background:#FFFAF7;position:relative;
-                    border-radius:16px;
-                    padding:20px 24px 16px;
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">06<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">06<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Q1 · Do people who join VIP buy more?</div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -2285,9 +2310,9 @@ def slide_6():
                     </div>
                     <div style="
                         color:#526176;
-                        font-size:13px;
+                        font-size:clamp(7.8px, 0.967cqw, 13px);
                         line-height:1.5;
-                        margin-top:8px;
+                        margin-top:clamp(6px, 0.595cqw, 8px);
                     ">
                         Activity for the selected cohort before and after enrollment.
                         The dashed vertical line marks the enrollment week.
@@ -2318,11 +2343,11 @@ def slide_6():
                                 <div style="
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
-                                    border-radius:14px;
-                                    padding:14px 16px;
+                                    border-radius:clamp(8.4px, 1.041cqw, 14px);
+                                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                                     color:#526176;
                                     font-family:Inter,Arial,sans-serif;
-                                    font-size:12px;
+                                    font-size:clamp(7.2px, 0.892cqw, 12px);
                                     line-height:1.5;
                                 ">
                                     <strong style="color:#0B1F3A;">How to read this (N={_n}):</strong>
@@ -2445,7 +2470,7 @@ def slide_7():
             text=alt.Text("rate:Q", format=".0%"),
         ),
     ).properties(
-        height=228,
+        height=210,
         width=340,
         title="Enrollment rate by experiment arm",
     )
@@ -2480,31 +2505,31 @@ def slide_7():
     <div style="
         background:#FFFFFF;
         border:1px solid #F0E5DF;
-        border-radius:14px;
-        padding:14px 16px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#FF5B24;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight:800;
             letter-spacing:1px;
             text-transform:uppercase;
-            margin-bottom:10px;
+            margin-bottom:clamp(6px, 0.743cqw, 10px);
         ">Baseline characteristics</div>
         <table style="
             width:100%;
             border-collapse:collapse;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             line-height:1.45;
         ">
             <thead>
                 <tr style="text-align:left;background:#FFFAF7;">
-                    <th style="padding:9px 7px;">Baseline</th>
-                    <th style="padding:9px 7px;">Invitation</th>
-                    <th style="padding:9px 7px;">Control</th>
-                    <th style="padding:9px 7px;">p-value</th>
+                    <th style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">Baseline</th>
+                    <th style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">Invitation</th>
+                    <th style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">Control</th>
+                    <th style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">p-value</th>
                 </tr>
             </thead>
             <tbody>
@@ -2512,10 +2537,10 @@ def slide_7():
         + "".join(
             f"""
                 <tr style="border-top:1px solid #F0E5DF;">
-                    <td style="padding:9px 7px;font-weight:700;">{_r["metric"]}</td>
-                    <td style="padding:9px 7px;">{_r["invitation"]:.2f}</td>
-                    <td style="padding:9px 7px;">{_r["control"]:.2f}</td>
-                    <td style="padding:9px 7px;">{_r["p"]:.3f}</td>
+                    <td style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);font-weight:700;">{_r["metric"]}</td>
+                    <td style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">{_r["invitation"]:.2f}</td>
+                    <td style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">{_r["control"]:.2f}</td>
+                    <td style="padding:clamp(6px, 0.669cqw, 9px) clamp(6px, 0.520cqw, 7px);">{_r["p"]:.3f}</td>
                 </tr>
         """
             for _r in _bal.to_dict(orient="records")
@@ -2589,7 +2614,7 @@ def slide_7():
     )
 
     _curve_chart = alt.layer(_curve_chart, _rule).properties(
-        height=205,
+        height=190,
         title="Cumulative enrollment over time",
     )
 
@@ -2646,28 +2671,28 @@ def slide_7():
             mo.Html("""
                 <div style="
                     background:#FFFAF7;position:relative;
-                    border-radius:16px;
-                    padding:20px 24px 16px;
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">07<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">07<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Q2 · Does inviting people to join VIP help in making them come back? </div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -2677,9 +2702,9 @@ def slide_7():
                     </div>
                     <div style="
                         color:#526176;
-                        font-size:13px;
+                        font-size:clamp(7.8px, 0.967cqw, 13px);
                         line-height:1.5;
-                        margin-top:8px;
+                        margin-top:clamp(6px, 0.595cqw, 8px);
                     ">
                         Compare enrollment between assigned experiment arms,
                         then follow how the gap develops over time.
@@ -2696,9 +2721,9 @@ def slide_7():
                                 <div style="
                                     color:#526176;
                                     font-family:Inter,Arial,sans-serif;
-                                    font-size:12px;
+                                    font-size:clamp(7.2px, 0.892cqw, 12px);
                                     line-height:1.5;
-                                    padding:2px 2px 0;
+                                    padding:clamp(6px, 0.149cqw, 2px) clamp(6px, 0.149cqw, 2px)0;
                                 ">
                                     Invited and Control arms had near-identical June
                                     purchase frequency prior to assignment
@@ -2716,24 +2741,24 @@ def slide_7():
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
                                     border-left:5px solid #FF5B24;
-                                    border-radius:14px;
-                                    padding:14px 16px;
+                                    border-radius:clamp(8.4px, 1.041cqw, 14px);
+                                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                                     color:#0B1F3A;
                                     font-family:Inter,Arial,sans-serif;
                                 ">
                                     <div style="
                                         color:#FF5B24;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         font-weight:800;
                                         letter-spacing:1px;
                                         text-transform:uppercase;
-                                        margin-bottom:8px;
+                                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                                     ">Cumulative enrollment · Week {_wk}</div>
                                     <div style="
-                                        font-size:20px;
+                                        font-size:clamp(12px, 1.487cqw, 20px);
                                         line-height:1.3;
                                         font-weight:800;
-                                        margin-bottom:6px;
+                                        margin-bottom:clamp(6px, 0.446cqw, 6px);
                                     ">
                                         {_cum_inv:.1%} invitation
                                         <span style="color:#526176;font-weight:500;">vs.</span>
@@ -2741,16 +2766,16 @@ def slide_7():
                                     </div>
                                     <div style="
                                         color:#FF5B24;
-                                        font-size:15px;
+                                        font-size:clamp(9px, 1.115cqw, 15px);
                                         font-weight:800;
                                     ">
                                         Difference: {_week_lift_pp:+.1f} percentage points
                                     </div>
                                     <div style="
                                         color:#526176;
-                                        font-size:12px;
+                                        font-size:clamp(7.2px, 0.892cqw, 12px);
                                         line-height:1.5;
-                                        margin-top:8px;
+                                        margin-top:clamp(6px, 0.595cqw, 8px);
                                     ">
                                         Ever-enrollment difference across the observation
                                         period: {_ever_lift_pp:+.1f} pp
@@ -2867,33 +2892,33 @@ def slide_8():
         width:100%;
         background:#FFFFFF;
         border:1px solid #F0E5DF;
-        border-radius:14px;
-        padding:14px 16px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#FF5B24;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight:800;
             letter-spacing:1px;
             text-transform:uppercase;
-            margin-bottom:10px;
+            margin-bottom:clamp(6px, 0.743cqw, 10px);
         ">Outcome estimates</div>
         <table style="
             border-collapse:collapse;
             table-layout:auto;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             line-height:1.4;
             width:100%;
         ">
             <thead>
                 <tr style="text-align:left;background:#FFFAF7;">
-                    <th style="padding:8px 6px;">Metric</th>
-                    <th style="padding:8px 6px;text-align:right;">Control</th>
-                    <th style="padding:8px 6px;text-align:right;">Invitation</th>
-                    <th style="padding:8px 6px;text-align:right;">Diff. [95% CI]</th>
-                    <th style="padding:8px 6px;text-align:right;">p</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);">Metric</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;">Control</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;">Invitation</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;">Diff. [95% CI]</th>
+                    <th style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;">p</th>
                 </tr>
             </thead>
             <tbody>
@@ -2901,13 +2926,13 @@ def slide_8():
         + "".join(
             f"""
                 <tr style="border-top:1px solid #F0E5DF;">
-                    <td style="padding:8px 6px;font-weight:700;">{_r["metric"]}</td>
-                    <td style="padding:8px 6px;text-align:right;white-space:nowrap;">{_fmt(_r["control"], _r["unit"])}</td>
-                    <td style="padding:8px 6px;text-align:right;white-space:nowrap;">{_fmt(_r["invitation"], _r["unit"])}</td>
-                    <td style="padding:8px 6px;text-align:right;white-space:nowrap;">
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);font-weight:700;">{_r["metric"]}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;white-space:nowrap;">{_fmt(_r["control"], _r["unit"])}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;white-space:nowrap;">{_fmt(_r["invitation"], _r["unit"])}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;white-space:nowrap;">
                         {_r["diff_pct"]:+.1f}% [{_r["lo_pct"]:+.1f}, {_r["hi_pct"]:+.1f}]
                     </td>
-                    <td style="padding:8px 6px;text-align:right;">{_r["p"]:.3f}</td>
+                    <td style="padding:clamp(6px, 0.595cqw, 8px) clamp(6px, 0.446cqw, 6px);text-align:right;">{_r["p"]:.3f}</td>
                 </tr>
         """
             for _r in _df.to_dict(orient="records")
@@ -3024,28 +3049,28 @@ def slide_8():
                     box-sizing:border-box;
                     width:100%;
                     background:#FFFAF7;position:relative;
-                    border-radius:16px;
-                    padding:20px 24px 16px;
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">08<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">08<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Q2 · Does inviting people to join VIP help in making them come back?</div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -3055,9 +3080,9 @@ def slide_8():
                     </div>
                     <div style="
                         color:#526176;
-                        font-size:13px;
+                        font-size:clamp(7.8px, 0.967cqw, 13px);
                         line-height:1.5;
-                        margin-top:8px;
+                        margin-top:clamp(6px, 0.595cqw, 8px);
                     ">
                         Compare post-exposure activity and spending between
                         invitation and control users.
@@ -3074,27 +3099,27 @@ def slide_8():
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
                                     border-left:5px solid #FF5B24;
-                                    border-radius:14px;
-                                    padding:14px 16px;
+                                    border-radius:clamp(8.4px, 1.041cqw, 14px);
+                                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                                     color:#0B1F3A;
                                     font-family:Inter,Arial,sans-serif;
                                 ">
                                     <div style="
                                         color:#FF5B24;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         font-weight:800;
                                         letter-spacing:1px;
                                         text-transform:uppercase;
-                                        margin-bottom:8px;
+                                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                                     ">Interpretation</div>
-                                    <div style="font-size:13px;line-height:1.5;font-weight:700;">
+                                    <div style="font-size:clamp(7.8px, 0.967cqw, 13px);line-height:1.5;font-weight:700;">
                                         {_takeaway}
                                     </div>
                                     <div style="
                                         color:#526176;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         line-height:1.5;
-                                        margin-top:6px;
+                                        margin-top:clamp(6px, 0.446cqw, 6px);
                                     ">
                                         Points show estimated differences; lines show
                                         95% confidence intervals.{_scale_note}
@@ -3271,25 +3296,25 @@ def slide_9():
         width:100%;
         background:#FFFFFF;
         border:1px solid #F0E5DF;
-        border-radius:14px;
-        padding:16px;
+        border-radius:clamp(8.4px, 1.041cqw, 14px);
+        padding:clamp(9.6px, 1.190cqw, 16px);
         color:#0B1F3A;
         font-family:Inter,Arial,sans-serif;
     ">
         <div style="
             color:#FF5B24;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             font-weight:800;
             letter-spacing:1px;
             text-transform:uppercase;
-            margin-bottom:6px;
+            margin-bottom:clamp(6px, 0.446cqw, 6px);
         ">Illustrative online cross-sell scenario</div>
 
         <div style="
             color:#526176;
-            font-size:12px;
+            font-size:clamp(7.2px, 0.892cqw, 12px);
             line-height:1.45;
-            margin-bottom:14px;
+            margin-bottom:clamp(8.4px, 1.041cqw, 14px);
         ">
             What if each VIP made <b>{_extra:.1f} extra online purchases per month?</b>
         </div>
@@ -3297,64 +3322,64 @@ def slide_9():
         <div style="
             display:grid;
             grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
-            gap:8px;
+            gap:clamp(6px, 0.595cqw, 8px);
             align-items:stretch;
         ">
-            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:10px;padding:12px;">
-                <div style="font-size:10px;color:#526176;margin-bottom:6px;">1 · Extra purchases / year</div>
-                <div style="font-size:20px;font-weight:800;color:#0B1F3A;">{_tx_year:,.0f}</div>
-                <div style="font-size:11px;color:#526176;margin-top:5px;">VIPs × 12 × {_extra:.1f}</div>
+            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:clamp(6px, 0.743cqw, 10px);padding:clamp(7.2px, 0.892cqw, 12px);">
+                <div style="font-size:clamp(6px, 0.743cqw, 10px);color:#526176;margin-bottom:clamp(6px, 0.446cqw, 6px);">1 · Extra purchases / year</div>
+                <div style="font-size:clamp(12px, 1.487cqw, 20px);font-weight:800;color:#0B1F3A;">{_tx_year:,.0f}</div>
+                <div style="font-size:clamp(6.6px, 0.818cqw, 11px);color:#526176;margin-top:clamp(6px, 0.372cqw, 5px);">VIPs × 12 × {_extra:.1f}</div>
             </div>
 
-            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:10px;padding:12px;">
-                <div style="font-size:10px;color:#526176;margin-bottom:6px;">2 · Incremental online GMV</div>
-                <div style="font-size:20px;font-weight:800;color:#0B1F3A;">NOK {_gmv:,.0f}</div>
-                <div style="font-size:11px;color:#526176;margin-top:5px;">Purchases × {_c["avg_online_ticket"]:,.0f} NOK average ticket</div>
+            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:clamp(6px, 0.743cqw, 10px);padding:clamp(7.2px, 0.892cqw, 12px);">
+                <div style="font-size:clamp(6px, 0.743cqw, 10px);color:#526176;margin-bottom:clamp(6px, 0.446cqw, 6px);">2 · Incremental online GMV</div>
+                <div style="font-size:clamp(12px, 1.487cqw, 20px);font-weight:800;color:#0B1F3A;">NOK {_gmv:,.0f}</div>
+                <div style="font-size:clamp(6.6px, 0.818cqw, 11px);color:#526176;margin-top:clamp(6px, 0.372cqw, 5px);">Purchases × {_c["avg_online_ticket"]:,.0f} NOK average ticket</div>
             </div>
 
-            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:10px;padding:12px;">
-                <div style="font-size:10px;color:#526176;margin-bottom:6px;">3 · Estimated fee revenue</div>
-                <div style="font-size:20px;font-weight:800;color:#0B1F3A;">NOK {_fee:,.0f}</div>
-                <div style="font-size:11px;color:#526176;margin-top:5px;">GMV × {_c["online_take"]:.2%} take rate</div>
+            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:clamp(6px, 0.743cqw, 10px);padding:clamp(7.2px, 0.892cqw, 12px);">
+                <div style="font-size:clamp(6px, 0.743cqw, 10px);color:#526176;margin-bottom:clamp(6px, 0.446cqw, 6px);">3 · Estimated fee revenue</div>
+                <div style="font-size:clamp(12px, 1.487cqw, 20px);font-weight:800;color:#0B1F3A;">NOK {_fee:,.0f}</div>
+                <div style="font-size:clamp(6.6px, 0.818cqw, 11px);color:#526176;margin-top:clamp(6px, 0.372cqw, 5px);">GMV × {_c["online_take"]:.2%} take rate</div>
             </div>
 
-            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:10px;padding:12px;">
-                <div style="font-size:10px;color:#526176;margin-bottom:6px;">4 · Point cost</div>
-                <div style="font-size:20px;font-weight:800;color:#0B1F3A;">− NOK {_cost:,.0f}</div>
-                <div style="font-size:11px;color:#526176;margin-top:5px;">GMV × {_bps} bps assumed cost</div>
+            <div style="background:#FFFAF7;border:1px solid #F0E5DF;border-radius:clamp(6px, 0.743cqw, 10px);padding:clamp(7.2px, 0.892cqw, 12px);">
+                <div style="font-size:clamp(6px, 0.743cqw, 10px);color:#526176;margin-bottom:clamp(6px, 0.446cqw, 6px);">4 · Point cost</div>
+                <div style="font-size:clamp(12px, 1.487cqw, 20px);font-weight:800;color:#0B1F3A;">− NOK {_cost:,.0f}</div>
+                <div style="font-size:clamp(6.6px, 0.818cqw, 11px);color:#526176;margin-top:clamp(6px, 0.372cqw, 5px);">GMV × {_bps} bps assumed cost</div>
             </div>
         </div>
 
         <div style="
-            margin-top:10px;
-            padding:14px;
+            margin-top:clamp(6px, 0.743cqw, 10px);
+            padding:clamp(8.4px, 1.041cqw, 14px);
             background:#0B1F3A;
-            border-radius:10px;
+            border-radius:clamp(6px, 0.743cqw, 10px);
             color:#FFFFFF;
             display:flex;
             justify-content:space-between;
             align-items:center;
-            gap:12px;
+            gap:clamp(7.2px, 0.892cqw, 12px);
             flex-wrap:wrap;
         ">
             <div>
-                <div style="font-size:10px;color:#D8DEE7;text-transform:uppercase;letter-spacing:1px;">
+                <div style="font-size:clamp(6px, 0.743cqw, 10px);color:#D8DEE7;text-transform:uppercase;letter-spacing:1px;">
                     Estimated fee revenue less point cost
                 </div>
-                <div style="font-size:12px;color:#FFFFFF;margin-top:4px;">
+                <div style="font-size:clamp(7.2px, 0.892cqw, 12px);color:#FFFFFF;margin-top:clamp(6px, 0.297cqw, 4px);">
                     Fee revenue − point cost
                 </div>
             </div>
-            <div style="font-size:22px;font-weight:800;color:#FF8A63;">
+            <div style="font-size:clamp(13.2px, 1.636cqw, 22px);font-weight:800;color:#FF8A63;">
                 NOK {_net:,.0f}
             </div>
         </div>
 
         <div style="
             color:#526176;
-            font-size:11px;
+            font-size:clamp(6.6px, 0.818cqw, 11px);
             line-height:1.45;
-            margin-top:10px;
+            margin-top:clamp(6px, 0.743cqw, 10px);
         ">
             Illustrative only. Assumes 195 VIP users (2025 total).
             Take rate is average of all online take rates.
@@ -3369,20 +3394,20 @@ def slide_9():
             background:#FFFFFF;
             border:1px solid #F0E5DF;
             border-left:5px solid #2F6DB3;
-            border-radius:14px;
-            padding:14px 16px;
+            border-radius:clamp(8.4px, 1.041cqw, 14px);
+            padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
             color:#0B1F3A;
             font-family:Inter,Arial,sans-serif;
         ">
             <div style="
                 color:#2F6DB3;
-                font-size:11px;
+                font-size:clamp(6.6px, 0.818cqw, 11px);
                 font-weight:800;
                 letter-spacing:1px;
                 text-transform:uppercase;
-                margin-bottom:8px;
+                margin-bottom:clamp(6px, 0.595cqw, 8px);
             ">Ideas to test</div>
-            <div style="font-size:14px;line-height:1.65;">
+            <div style="font-size:clamp(8.4px, 1.041cqw, 14px);line-height:1.65;">
                 <b>1.</b> Replace batch signup invites with a 14-day inactivity trigger <br>
                 <b>2.</b> Test online checkout point multipliers to encourage online purchases.<br>
             </div>
@@ -3401,28 +3426,28 @@ def slide_9():
                     box-sizing:border-box;
                     width:100%;
                     background:#FFFAF7;position:relative;
-                    border-radius:16px;
-                    padding:20px 24px 16px;
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
+                    padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">09<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">09<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Q3 · Recommendations &amp; next steps</div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -3431,9 +3456,9 @@ def slide_9():
                     </div>
                     <div style="
                         color:#526176;
-                        font-size:13px;
+                        font-size:clamp(7.8px, 0.967cqw, 13px);
                         line-height:1.5;
-                        margin-top:8px;
+                        margin-top:clamp(6px, 0.595cqw, 8px);
                     ">
                         Sector GMV and take rates can help identify where online
                         cross-sell may be worth testing.
@@ -3449,7 +3474,7 @@ def slide_9():
                                 <div style="
                                     color:#526176;
                                     font-family:Inter,Arial,sans-serif;
-                                    font-size:11px;
+                                    font-size:clamp(6.6px, 0.818cqw, 11px);
                                     line-height:1.45;
                                 ">
                                     GMV share describes transaction value mix; take rate
@@ -3481,28 +3506,28 @@ def slide_10():
                     box-sizing:border-box;
                     width:100%;
                     background:#FFFAF7;position:relative;
-                    border-radius:16px;
-                    padding:22px 24px;
+                    border-radius:clamp(9.6px, 1.190cqw, 16px);
+                    padding:clamp(13.2px, 1.636cqw, 22px) clamp(14.4px, 1.784cqw, 24px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">10<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">10<span style="color:#8C8C8C;"> / 11</span></div>
                     <div style="
-                        height:5px;
+                        height:clamp(6px, 0.372cqw, 5px);
                         background:#FF5B24;
-                        border-radius:8px;
-                        margin-bottom:16px;
+                        border-radius:clamp(6px, 0.595cqw, 8px);
+                        margin-bottom:clamp(9.6px, 1.190cqw, 16px);
                     "></div>
                     <div style="
                         color:#FF5B24;
-                        font-size:11px;
+                        font-size:clamp(6.6px, 0.818cqw, 11px);
                         font-weight:800;
                         letter-spacing:1.5px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">Q3 · Recommendations &amp; next steps</div>
                     <div style="
                         color:#0B1F3A;
-                        font-size:26px;
+                        font-size:clamp(15.6px, 1.933cqw, 26px);
                         line-height:1.2;
                         font-weight:800;
                         letter-spacing:-0.5px;
@@ -3511,9 +3536,9 @@ def slide_10():
                     </div>
                     <div style="
                         color:#526176;
-                        font-size:14px;
+                        font-size:clamp(8.4px, 1.041cqw, 14px);
                         line-height:1.5;
-                        margin-top:10px;
+                        margin-top:clamp(6px, 0.743cqw, 10px);
                     ">
                         Focus the analysis on reliable, decision-ready evidence.
                         Revisit these areas when the data can support stronger conclusions.
@@ -3526,7 +3551,7 @@ def slide_10():
                         <div style="
                             color:#526176;
                             font-family:Inter,Arial,sans-serif;
-                            font-size:11px;
+                            font-size:clamp(6.6px, 0.818cqw, 11px);
                             font-weight:800;
                             letter-spacing:1px;
                             text-transform:uppercase;
@@ -3543,32 +3568,32 @@ def slide_10():
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
                                     border-top:4px solid #FF5B24;
-                                    border-radius:12px;
-                                    padding:16px;
+                                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                                    padding:clamp(9.6px, 1.190cqw, 16px);
                                     color:#0B1F3A;
                                     font-family:Inter,Arial,sans-serif;
                                 ">
                                     <div style="
                                         color:#FF5B24;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         font-weight:800;
                                         letter-spacing:0.8px;
                                         text-transform:uppercase;
-                                        margin-bottom:8px;
+                                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                                     ">01 · Card-level analysis</div>
-                                    <div style="font-size:16px;font-weight:800;margin-bottom:8px;">
+                                    <div style="font-size:clamp(9.6px, 1.190cqw, 16px);font-weight:800;margin-bottom:clamp(6px, 0.595cqw, 8px);">
                                         cards.csv
                                     </div>
-                                    <div style="font-size:12px;line-height:1.5;color:#526176;">
+                                    <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                                         <b style="color:#0B1F3A;">Why deferred</b><br>
                                         Card status is only known at the 2026-01-01 cutoff, not historical
                                         purchase time. Optional table, so not investigated further.
                                     </div>
                                     <div style="
-                                        margin-top:14px;
-                                        padding-top:10px;
+                                        margin-top:clamp(8.4px, 1.041cqw, 14px);
+                                        padding-top:clamp(6px, 0.743cqw, 10px);
                                         border-top:1px solid #F0E5DF;
-                                        font-size:12px;
+                                        font-size:clamp(7.2px, 0.892cqw, 12px);
                                         line-height:1.45;
                                     ">
                                         <b>Revisit when:</b> card history (issued, blocked, cancelled) exists.
@@ -3583,33 +3608,33 @@ def slide_10():
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
                                     border-top:4px solid #2F6DB3;
-                                    border-radius:12px;
-                                    padding:16px;
+                                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                                    padding:clamp(9.6px, 1.190cqw, 16px);
                                     color:#0B1F3A;
                                     font-family:Inter,Arial,sans-serif;
                                 ">
                                     <div style="
                                         color:#2F6DB3;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         font-weight:800;
                                         letter-spacing:0.8px;
                                         text-transform:uppercase;
-                                        margin-bottom:8px;
+                                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                                     ">02 · Age segmentation</div>
-                                    <div style="font-size:16px;font-weight:800;margin-bottom:8px;">
+                                    <div style="font-size:clamp(9.6px, 1.190cqw, 16px);font-weight:800;margin-bottom:clamp(6px, 0.595cqw, 8px);">
                                         16 age buckets
                                     </div>
-                                    <div style="font-size:12px;line-height:1.5;color:#526176;">
+                                    <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                                         <b style="color:#0B1F3A;">Why deferred</b><br>
                                         Splitting 419 users into 16 four-year bands leaves about 26 per
                                         band, and only ~7 per experiment arm — too few to compare
                                         reliably.
                                     </div>
                                     <div style="
-                                        margin-top:14px;
-                                        padding-top:10px;
+                                        margin-top:clamp(8.4px, 1.041cqw, 14px);
+                                        padding-top:clamp(6px, 0.743cqw, 10px);
                                         border-top:1px solid #F0E5DF;
-                                        font-size:12px;
+                                        font-size:clamp(7.2px, 0.892cqw, 12px);
                                         line-height:1.45;
                                     ">
                                         <b>Revisit with:</b> pooled years or wider age bands.
@@ -3624,32 +3649,32 @@ def slide_10():
                                     background:#FFFFFF;
                                     border:1px solid #F0E5DF;
                                     border-top:4px solid #8C8C8C;
-                                    border-radius:12px;
-                                    padding:16px;
+                                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                                    padding:clamp(9.6px, 1.190cqw, 16px);
                                     color:#0B1F3A;
                                     font-family:Inter,Arial,sans-serif;
                                 ">
                                     <div style="
                                         color:#8C8C8C;
-                                        font-size:11px;
+                                        font-size:clamp(6.6px, 0.818cqw, 11px);
                                         font-weight:800;
                                         letter-spacing:0.8px;
                                         text-transform:uppercase;
-                                        margin-bottom:8px;
+                                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                                     ">03 · December retention</div>
-                                    <div style="font-size:16px;font-weight:800;margin-bottom:8px;">
+                                    <div style="font-size:clamp(9.6px, 1.190cqw, 16px);font-weight:800;margin-bottom:clamp(6px, 0.595cqw, 8px);">
                                         December wave
                                     </div>
-                                    <div style="font-size:12px;line-height:1.5;color:#526176;">
+                                    <div style="font-size:clamp(7.2px, 0.892cqw, 12px);line-height:1.5;color:#526176;">
                                         <b style="color:#0B1F3A;">Why deferred</b><br>
                                         Limited days of observation were available
                                         before the 2026-01-01 cutoff.
                                     </div>
                                     <div style="
-                                        margin-top:14px;
-                                        padding-top:10px;
+                                        margin-top:clamp(8.4px, 1.041cqw, 14px);
+                                        padding-top:clamp(6px, 0.743cqw, 10px);
                                         border-top:1px solid #F0E5DF;
-                                        font-size:12px;
+                                        font-size:clamp(7.2px, 0.892cqw, 12px);
                                         line-height:1.45;
                                     ">
                                         <b>Revisit in:</b> Q1 2026, once 16 weeks elapse.
@@ -3669,11 +3694,11 @@ def slide_10():
                     box-sizing:border-box;
                     width:100%;
                     background:#0B1F3A;
-                    border-radius:12px;
-                    padding:14px 18px;
+                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(10.8px, 1.338cqw, 18px);
                     color:#FFFFFF;
                     font-family:Inter,Arial,sans-serif;
-                    font-size:13px;
+                    font-size:clamp(7.8px, 0.967cqw, 13px);
                     line-height:1.5;
                 ">
                     <span style="color:#FF8A63;font-weight:800;">Principle:</span>
@@ -3696,29 +3721,29 @@ def slide_11():
             width:100%;
             background:#FFFAF7;
             position:relative;
-            border-radius:16px;
-            padding:20px 24px 16px;
+            border-radius:clamp(9.6px, 1.190cqw, 16px);
+            padding:clamp(12px, 1.487cqw, 20px) clamp(14.4px, 1.784cqw, 24px) clamp(9.6px, 1.190cqw, 16px);
             color:#0B1F3A;
             font-family:Inter,Arial,sans-serif;
         ">
-            <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">11<span style="color:#8C8C8C;"> / 11</span></div>
+            <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.818cqw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">11<span style="color:#8C8C8C;"> / 11</span></div>
             <div style="
-                height:5px;
+                height:clamp(6px, 0.372cqw, 5px);
                 background:#FF5B24;
-                border-radius:8px;
-                margin-bottom:16px;
+                border-radius:clamp(6px, 0.595cqw, 8px);
+                margin-bottom:clamp(9.6px, 1.190cqw, 16px);
             "></div>
             <div style="
                 color:#FF5B24;
-                font-size:11px;
+                font-size:clamp(6.6px, 0.818cqw, 11px);
                 font-weight:800;
                 letter-spacing:1.5px;
                 text-transform:uppercase;
-                margin-bottom:8px;
+                margin-bottom:clamp(6px, 0.595cqw, 8px);
             ">Appendix · Sources, lineage &amp; AI workflow</div>
             <div style="
                 color:#0B1F3A;
-                font-size:26px;
+                font-size:clamp(15.6px, 1.933cqw, 26px);
                 line-height:1.2;
                 font-weight:800;
                 letter-spacing:-0.5px;
@@ -3727,9 +3752,9 @@ def slide_11():
             </div>
             <div style="
                 color:#526176;
-                font-size:13px;
+                font-size:clamp(7.8px, 0.967cqw, 13px);
                 line-height:1.5;
-                margin-top:8px;
+                margin-top:clamp(6px, 0.595cqw, 8px);
             ">
                 All metrics, marts, and interactive visuals are generated reproducibly
                 from immutable raw CSVs.
@@ -3738,40 +3763,40 @@ def slide_11():
             <div style="
                 display:grid;
                 grid-template-columns:repeat(2, minmax(0, 1fr));
-                gap:14px;
-                margin-top:14px;
+                gap:clamp(8.4px, 1.041cqw, 14px);
+                margin-top:clamp(8.4px, 1.041cqw, 14px);
             ">
                 <div style="
                     background:#FFFFFF;
                     border:1px solid #F0E5DF;
                     border-top:4px solid #FF5B24;
-                    border-radius:12px;
-                    padding:14px 16px;
+                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
                     <div style="
                         color:#FF5B24;
-                        font-size:10px;
+                        font-size:clamp(6px, 0.743cqw, 10px);
                         font-weight:800;
                         letter-spacing:0.9px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">01 · Code, notebooks &amp; plot archive</div>
-                    <div style="font-size:11.5px;line-height:1.5;color:#526176;">
-                        <div style="margin-top:6px;">
+                    <div style="font-size:clamp(6.9px, 0.855cqw, 11.5px);line-height:1.5;color:#526176;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">GitHub Repository</b> —
                             <a href="{REPO_URL}" target="_blank" rel="noopener"
                                style="color:#FF5B24;font-weight:700;text-decoration:none;border-bottom:1px solid #FF5B24;">vipps_da_interview_case</a>
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Full Analysis Workbook</b> —
                             notebooks/case_analysis.py
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Interactive Slide Deck</b> —
                             notebooks/vip_presentation.py
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Static Plot Gallery</b> —
                             plots/
                         </div>
@@ -3782,33 +3807,33 @@ def slide_11():
                     background:#FFFFFF;
                     border:1px solid #F0E5DF;
                     border-top:4px solid #2F6DB3;
-                    border-radius:12px;
-                    padding:14px 16px;
+                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
                     <div style="
                         color:#2F6DB3;
-                        font-size:10px;
+                        font-size:clamp(6px, 0.743cqw, 10px);
                         font-weight:800;
                         letter-spacing:0.9px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">02 · Data lineage &amp; semantic model</div>
-                    <div style="font-size:11.5px;line-height:1.5;color:#526176;">
-                        <div style="margin-top:6px;">
+                    <div style="font-size:clamp(6.9px, 0.855cqw, 11.5px);line-height:1.5;color:#526176;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Raw Case Data</b>
-                            <code style="font-size:10.5px;color:#0B1F3A;">data/raw/</code> —
+                            <code style="font-size:clamp(6.3px, 0.781cqw, 10.5px);color:#0B1F3A;">data/raw/</code> —
                             transactions.csv, users.csv, merchants.csv, mcc.csv,
                             experiment_exposure.csv, cards.csv (deferred)
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Derived Marts</b>
-                            <code style="font-size:10.5px;color:#0B1F3A;">data/processed/</code> —
+                            <code style="font-size:clamp(6.3px, 0.781cqw, 10.5px);color:#0B1F3A;">data/processed/</code> —
                             df_user_spine.csv, df_exp_eval.csv, df_weekly_panel.csv
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Semantic Layer</b>
-                            <code style="font-size:10.5px;color:#0B1F3A;">semantic/</code> —
+                            <code style="font-size:clamp(6.3px, 0.781cqw, 10.5px);color:#0B1F3A;">semantic/</code> —
                             model.yml, marts.yml, erd.md
                         </div>
                     </div>
@@ -3818,30 +3843,30 @@ def slide_11():
                     background:#FFFFFF;
                     border:1px solid #F0E5DF;
                     border-top:4px solid #0B1F3A;
-                    border-radius:12px;
-                    padding:14px 16px;
+                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
                     <div style="
                         color:#0B1F3A;
-                        font-size:10px;
+                        font-size:clamp(6px, 0.743cqw, 10px);
                         font-weight:800;
                         letter-spacing:0.9px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">03 · Tech stack &amp; statistical methods</div>
-                    <div style="font-size:11.5px;line-height:1.5;color:#526176;">
-                        <div style="margin-top:6px;">
+                    <div style="font-size:clamp(6.9px, 0.855cqw, 11.5px);line-height:1.5;color:#526176;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Compute &amp; QA</b> —
                             Python, DuckDB, Pandas, NumPy, ruff, pytest
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Visualization</b> —
                             Marimo + Altair (Vega-Lite)
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Statistical Inference</b>
-                            <code style="font-size:10.5px;color:#0B1F3A;">scipy.stats</code> —
+                            <code style="font-size:clamp(6.3px, 0.781cqw, 10.5px);color:#0B1F3A;">scipy.stats</code> —
                             Welch t-test, paired t-test, two-proportion z-test,
                             complier-scaled ITT
                         </div>
@@ -3852,28 +3877,28 @@ def slide_11():
                     background:#FFFFFF;
                     border:1px solid #F0E5DF;
                     border-top:4px solid #FF5B24;
-                    border-radius:12px;
-                    padding:14px 16px;
+                    border-radius:clamp(7.2px, 0.892cqw, 12px);
+                    padding:clamp(8.4px, 1.041cqw, 14px) clamp(9.6px, 1.190cqw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
                     <div style="
                         color:#FF5B24;
-                        font-size:10px;
+                        font-size:clamp(6px, 0.743cqw, 10px);
                         font-weight:800;
                         letter-spacing:0.9px;
                         text-transform:uppercase;
-                        margin-bottom:8px;
+                        margin-bottom:clamp(6px, 0.595cqw, 8px);
                     ">04 · AI models &amp; human verification</div>
-                    <div style="font-size:11.5px;line-height:1.5;color:#526176;">
-                        <div style="margin-top:6px;">
+                    <div style="font-size:clamp(6.9px, 0.855cqw, 11.5px);line-height:1.5;color:#526176;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Planning &amp; Analytical Partner</b> —
                             Gemini 4 Argon
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Coding &amp; Implementation Model</b> —
                             DeepSeek V4.1
                         </div>
-                        <div style="margin-top:6px;">
+                        <div style="margin-top:clamp(6px, 0.446cqw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Human-in-the-Loop Governance</b> —
                             every metric, cohort filter, and conclusion verified against raw data
                         </div>
@@ -3882,25 +3907,25 @@ def slide_11():
             </div>
 
             <div style="
-                margin-top:12px;
-                padding:13px 16px;
+                margin-top:clamp(7.2px, 0.892cqw, 12px);
+                padding:clamp(7.8px, 0.967cqw, 13px) clamp(9.6px, 1.190cqw, 16px);
                 background:#0B1F3A;
-                border-radius:12px;
+                border-radius:clamp(7.2px, 0.892cqw, 12px);
                 display:flex;
                 align-items:center;
                 justify-content:center;
-                gap:10px;
+                gap:clamp(6px, 0.743cqw, 10px);
                 font-family:Inter,Arial,sans-serif;
             ">
                 <div style="
                     width:7px;
-                    height:7px;
+                    height:clamp(6px, 0.520cqw, 7px);
                     background:#FF5B24;
                     border-radius:50%;
                     flex:0 0 auto;
                 "></div>
                 <div style="
-                    font-size:15px;
+                    font-size:clamp(9px, 1.115cqw, 15px);
                     font-weight:700;
                     letter-spacing:0.2px;
                     color:#FFFFFF;
