@@ -1686,12 +1686,13 @@ def build_analytical_marts(
 
 
 @app.cell(hide_code=True)
-def vip_selection_bias(alt, df_user_spine, duckdb, mo, np, pd, transactions):
+def vip_selection_bias(mo):
+    mo.md(r"""
     _con = duckdb.connect(":memory:")
     _con.register("user_spine", df_user_spine)
     _con.register("transactions", transactions)
     _sel = _con.execute(
-        """
+        "\"\"
         WITH tx AS (
             SELECT
                 user_id,
@@ -1736,7 +1737,7 @@ def vip_selection_bias(alt, df_user_spine, duckdb, mo, np, pd, transactions):
         FROM per_user
         GROUP BY 1
         ORDER BY 1
-        """
+        "\"\"
     ).df()
     _con.close()
 
@@ -1878,7 +1879,7 @@ def vip_selection_bias(alt, df_user_spine, duckdb, mo, np, pd, transactions):
             mo.accordion(
                 {
                     "How each metric is calculated": mo.md(
-                        """
+                        "\"\"
     **Sample.** `df_user_spine` rows with
     `is_full_year_obs == TRUE` (observation starts on or before
     2025-01-01), split by `vip_enrolled` at the 2026-01-01 cutoff:
@@ -1914,12 +1915,13 @@ def vip_selection_bias(alt, df_user_spine, duckdb, mo, np, pd, transactions):
     measured before any future VIP member could have joined. For the
     pre-VIP period the split is still by eventual membership, which is
     what makes the comparison a selection check rather than an effect.
-    """
+    "\"\"
                     )
                 }
             ),
         ]
     )
+    """)
     return
 
 

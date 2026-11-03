@@ -935,7 +935,7 @@ wheels = [
 [[package]]
 name = "vipps-da-case"
 version = "0.1.0"
-source = { editable = "." }
+source = { virtual = "." }
 dependencies = [
     { name = "altair" },
     { name = "duckdb" },

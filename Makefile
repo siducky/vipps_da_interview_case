@@ -1,6 +1,7 @@
-.PHONY:  help setup notebook app model agent check format test db semantic-check export-html export-wasm export clean
+.PHONY:  help setup notebook app model deck deck-pdf agent check format test db semantic-check export-html export-wasm export clean
 
 NOTEBOOK    := notebooks/case_analysis.py
+DECK        := notebooks/vip_presentation.py
 STATIC_HTML := reports/case_analysis.html
 SITE_DIR    := site
 
@@ -11,6 +12,8 @@ help: ## Show available commands
 	@echo "notebook     Open the notebook in marimo edit"
 	@echo "app          Run the notebook as a read-only app"
 	@echo "model        Open the data model viewer"
+	@echo "deck         Open the presentation deck"
+	@echo "deck-pdf     Export the deck to vip_presentation.pdf"
 	@echo "check        Run marimo checks and ruff lint/format checks"
 	@echo "format       Format Python code with ruff"
 	@echo "test         Run pytest if tests exist"
@@ -32,6 +35,12 @@ app: ## Run the notebook as a read-only app
 
 model: ## Open the data model viewer
 	uv run marimo edit notebooks/data_model.py
+
+deck: ## Open the presentation deck
+	uv run marimo edit $(DECK)
+
+deck-pdf: ## Export the deck to vip_presentation.pdf
+	uv run --with playwright --with pillow python scripts/export_deck_pdf.py
 
 check: semantic-check ## Run marimo checks and ruff lint/format checks
 	uv run marimo check $(NOTEBOOK) notebooks/data_model.py

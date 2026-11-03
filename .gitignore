@@ -21,6 +21,7 @@ wheels/
 # marimo and generated outputs
 __marimo__/
 site/
+reports/
 
 # Local data outputs
 data/processed/
