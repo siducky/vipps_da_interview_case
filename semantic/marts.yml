@@ -1,0 +1,212 @@
+version: 1
+name: vipps_analytical_marts
+description: >
+  Documentation for the three analysis-ready data marts built in
+  notebooks/case_analysis.py. Each mart is produced in-memory with DuckDB and
+  written to data/processed/. The semantics field states how each column is
+  derived from the raw tables.
+
+marts:
+  df_user_spine:
+    description: >
+      One row per user, with coverage, VIP cohort, experiment assignment and
+      pre-VIP baselines used for the VIP analysis.
+    grain: [user_id]
+    primary_key: user_id
+    rows: 419
+    source_tables: [users, transactions, experiment_exposure]
+    caveats:
+      - observation_start_date is the start of complete purchase coverage, not signup or first purchase.
+      - is_full_year_obs only says the observation window starts by 2025-01-01; it does not mean the user transacted every month.
+      - Weekly baselines divide by fixed calendar weeks (120/7 for Jan-Apr; 181/7 for H1), not by observed weeks.
+      - vip_cohort applies the case ordering never_vip, pre_exp_organic, experiment joiner, then non-experiment late organic.
+    columns:
+      user_id:
+        type: string
+        semantics: "users.user_id. Primary key; one row per user."
+      user_country:
+        type: string
+        semantics: "users.user_country."
+      age_bucket:
+        type: string
+        semantics: "users.age_bucket."
+      observation_start_date:
+        type: date
+        semantics: "CAST(users.observation_start_date AS DATE). Start of complete purchase coverage."
+      is_full_year_obs:
+        type: boolean
+        semantics: "observation_start_date <= DATE '2025-01-01'."
+      observable_days:
+        type: integer
+        semantics: "date_diff('day', observation_start_date, DATE '2026-01-01'). Days of covered 2025 history."
+      vip_enrolled:
+        type: boolean
+        semantics: "users.vip_enrolled. Membership status at the 2026-01-01 cutoff."
+      vip_enrolled_at:
+        type: timestamp
+        semantics: "users.vip_enrolled_at. Null for users who are not VIP at cutoff."
+      vip_cohort:
+        type: string
+        semantics: "CASE: never_vip if not vip_enrolled; pre_exp_organic if enrolled before 2025-07-01; exp_invitation_joiner if invitation arm and enrolled_at >= exposure_timestamp; exp_control_joiner if control arm and enrolled_at >= exposure_timestamp; otherwise non_exp_late_organic."
+      experiment_variant:
+        type: string
+        semantics: "experiment_exposure.variant, or 'unassigned' when the user is not in the experiment."
+      exposure_timestamp:
+        type: timestamp
+        semantics: "experiment_exposure.exposure_timestamp. Null when the user is not in the experiment."
+      experiment_wave:
+        type: string
+        semantics: "summer if exposure_timestamp < 2025-09-01; december if >= 2025-11-01; otherwise unassigned (including users outside the experiment)."
+      pre_may_tx_per_week:
+        type: float
+        semantics: "Count of transactions from 2025-01-01 to 2025-04-30, divided by 120/7 weeks. Zero when there are no transactions."
+      pre_may_gmv_per_week:
+        type: float
+        semantics: "Sum of volume_nok from 2025-01-01 to 2025-04-30, divided by 120/7 weeks. Zero when there are no transactions."
+      june_tx_count:
+        type: integer
+        semantics: "Count of transactions from 2025-06-01 to 2025-06-30. Zero when there are no transactions."
+      june_gmv_nok:
+        type: float
+        semantics: "Sum of volume_nok from 2025-06-01 to 2025-06-30. Zero when there are no transactions."
+      h1_tx_per_week:
+        type: float
+        semantics: "Count of transactions from 2025-01-01 to 2025-06-30, divided by 181/7 weeks. Zero when there are no transactions."
+
+  df_exp_eval:
+    description: >
+      One row per user in experiment_exposure, with pre-exposure covariates,
+      first-stage compliance and post-exposure retention/velocity outcomes.
+    grain: [user_id]
+    primary_key: user_id
+    rows: 269
+    source_tables: [experiment_exposure, users, transactions]
+    caveats:
+      - Pre-exposure means transaction_timestamp < exposure_timestamp; post-exposure means >= exposure_timestamp.
+      - 16-week outcomes use [exposure_timestamp, exposure_timestamp + 112 days). For the December wave this window is truncated by the year-end cutoff, but the denominator remains 16.
+      - retained_last_28d uses the fixed calendar window 2025-12-04 to 2025-12-31, not a user-specific post-exposure window.
+      - post_median_gap_days is null when a user has fewer than two post-exposure purchases; outcome counts and shares are zero-filled.
+    columns:
+      user_id:
+        type: string
+        semantics: "experiment_exposure.user_id. Primary key; one row per experiment user."
+      variant:
+        type: string
+        semantics: "experiment_exposure.variant: invitation or control."
+      exposure_timestamp:
+        type: timestamp
+        semantics: "experiment_exposure.exposure_timestamp. Assignment time for both arms; not invitation open or VIP signup."
+      june_tx_count:
+        type: integer
+        semantics: "Count of June 2025 transactions. Randomization block proxy."
+      pre_tx_per_week:
+        type: float
+        semantics: "Pre-exposure transaction count divided by weeks from observation_start_date to exposure_timestamp."
+      pre_gmv_per_week:
+        type: float
+        semantics: "Pre-exposure volume_nok divided by weeks from observation_start_date to exposure_timestamp."
+      pre_rev_per_week:
+        type: float
+        semantics: "Pre-exposure revenue_nok divided by weeks from observation_start_date to exposure_timestamp."
+      pre_online_tx_share:
+        type: float
+        semantics: "Pre-exposure online transaction count divided by pre-exposure transaction count; 0 when there are no pre-exposure transactions."
+      enrolled_post_exposure:
+        type: boolean
+        semantics: "vip_enrolled AND vip_enrolled_at >= exposure_timestamp."
+      enrolled_within_14d:
+        type: boolean
+        semantics: "enrolled_post_exposure AND vip_enrolled_at < exposure_timestamp + INTERVAL 14 DAY."
+      days_to_enroll:
+        type: integer
+        semantics: "date_diff('day', exposure_timestamp, vip_enrolled_at). Null when the user never enrolled."
+      post_tx_per_week_16w:
+        type: float
+        semantics: "Post-exposure transaction count in the 16-week window divided by 16. Zero-filled."
+      post_gmv_per_week_16w:
+        type: float
+        semantics: "Post-exposure volume_nok in the 16-week window divided by 16. Zero-filled."
+      post_rev_per_week_16w:
+        type: float
+        semantics: "Post-exposure revenue_nok in the 16-week window divided by 16. Zero-filled."
+      post_in_person_tx_per_week_16w:
+        type: float
+        semantics: "Post-exposure in_person transaction count in the 16-week window divided by 16. Zero-filled."
+      post_online_tx_per_week_16w:
+        type: float
+        semantics: "Post-exposure online transaction count in the 16-week window divided by 16. Zero-filled."
+      post_active_week_share_16w:
+        type: float
+        semantics: "Distinct 7-day post-exposure buckets with at least one purchase, divided by 16. Zero-filled."
+      in_person_active_week_share_16w:
+        type: float
+        semantics: "Distinct 7-day post-exposure buckets with at least one in_person purchase, divided by 16. Zero-filled."
+      online_active_month_share_16w:
+        type: float
+        semantics: "Distinct 28-day post-exposure buckets with at least one online purchase, divided by 4. Zero-filled."
+      post_median_gap_days:
+        type: float
+        semantics: "Median date_diff('day', previous purchase, current purchase) across post-exposure purchases. Null when fewer than two purchases."
+      retained_last_28d:
+        type: boolean
+        semantics: "At least one purchase with transaction_timestamp >= 2025-12-04 and < 2026-01-01."
+      is_dual_channel_16w:
+        type: boolean
+        semantics: "At least one in_person and at least one online purchase in the 16-week post-exposure window."
+
+  df_weekly_panel:
+    description: >
+      User-by-week panel covering all observed user-weeks in 2025, with
+      zero-filled activity and event-time positioning relative to VIP enrollment.
+    grain: [user_id, week_start]
+    primary_key: [user_id, week_start]
+    rows: 20725
+    source_tables: [df_user_spine, transactions, merchants, mcc]
+    caveats:
+      - Weeks run from 2024-12-30 to 2025-12-29 because 2025-01-01 falls in the week beginning 2024-12-30.
+      - Weeks begin on Monday as defined by date_trunc('week', ...).
+      - The first kept week is the week containing observation_start_date; earlier weeks are excluded.
+      - Transactions are joined to merchants and mcc to preserve the documented mart lineage, but mcc attributes are not selected into the panel.
+    columns:
+      user_id:
+        type: string
+        semantics: "df_user_spine.user_id. Part of the composite primary key."
+      week_start:
+        type: date
+        semantics: "Generated Monday week start from 2024-12-30 through 2025-12-29. Kept when week_start >= date_trunc('week', observation_start_date). Part of the composite primary key."
+      is_full_year_obs:
+        type: boolean
+        semantics: "df_user_spine.is_full_year_obs."
+      vip_cohort:
+        type: string
+        semantics: "df_user_spine.vip_cohort."
+      tx_count:
+        type: integer
+        semantics: "Count of transactions in the week. Zero-filled for weeks with no transactions."
+      in_person_tx_count:
+        type: integer
+        semantics: "Count of in_person transactions in the week. Zero-filled."
+      online_tx_count:
+        type: integer
+        semantics: "Count of online transactions in the week. Zero-filled."
+      gmv_nok:
+        type: float
+        semantics: "Sum of volume_nok in the week. Zero-filled."
+      in_person_gmv_nok:
+        type: float
+        semantics: "Sum of volume_nok for in_person transactions in the week. Zero-filled."
+      online_gmv_nok:
+        type: float
+        semantics: "Sum of volume_nok for online transactions in the week. Zero-filled."
+      revenue_nok:
+        type: float
+        semantics: "Sum of revenue_nok in the week. Zero-filled."
+      is_active_week:
+        type: boolean
+        semantics: "tx_count > 0."
+      is_vip_now:
+        type: boolean
+        semantics: "vip_enrolled_at is not null AND week_start >= date_trunc('week', vip_enrolled_at)."
+      rel_week_to_vip:
+        type: integer
+        semantics: "floor((week_start - date_trunc('week', vip_enrolled_at)) / 7 days). Week 0 is the enrollment week; null for non-VIP users."

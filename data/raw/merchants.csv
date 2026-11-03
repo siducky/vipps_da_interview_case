@@ -1,0 +1,31 @@
+merchant_id,merchant_name,merchant_country,merchant_mcc_code
+M001,Fjord Basket,Norway,5411
+M002,Nord Pantry,Norway,5411
+M003,Harbour Grocer,Denmark,5411
+M004,Meadow Market,Denmark,5411
+M005,Birch Foods,Sweden,5411
+M006,Harvest Box,Norway,5499
+M007,Little Orchard,Norway,5499
+M008,Coastal Delights,Denmark,5499
+M009,Green Shelf,Denmark,5499
+M010,Honey Lane,Sweden,5499
+M011,Nord Thread,Norway,5651
+M012,Everyday Wardrobe,Denmark,5651
+M013,Willow Wear,Sweden,5651
+M014,Harbour Apparel,Germany,5651
+M015,Birch Studio,Netherlands,5651
+M016,Bright Circuit,Norway,5732
+M017,North Pixel,Denmark,5732
+M018,Clearwave Electronics,Sweden,
+M019,Signal Shop,Germany,5732
+M020,Copper Digital,Netherlands,5732
+M021,Oak Living,Norway,5712
+M022,Room & Grain,Denmark,5712
+M023,Soft Nest,Sweden,5712
+M024,Harbour Home,Germany,5712
+M025,Maple House,Netherlands,5712
+M026,Paper Lantern,Norway,5942
+M027,North Chapter,Denmark,5942
+M028,Birch Books,Sweden,5942
+M029,Open Pages,Germany,5942
+M030,Story Shelf,Netherlands,5942

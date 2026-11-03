@@ -1,0 +1,407 @@
+version: 1
+name: vipps_da_case
+description: >
+  Semantic model for the Vipps Data Analyst interview case. The dataset is
+  synthetic and contains completed card purchases during 2025.
+cutoff: "2026-01-01 00:00:00"
+timezone_note: "Common fictional clock; no timezone conversion is needed."
+encoding: utf-8
+format: csv_with_headers
+missing_value_note: "Empty fields mean missing, not zero."
+
+tables:
+  transactions:
+    file: data/raw/transactions.csv
+    description: One completed positive purchase.
+    grain: [transaction_id]
+    primary_key: transaction_id
+    synonyms: [purchases, payments]
+    columns:
+      transaction_id:
+        type: string
+        description: Unique purchase identifier.
+      user_id:
+        type: string
+        description: Purchaser; joins to users.user_id.
+        references: users.user_id
+      merchant_id:
+        type: string
+        description: Merchant receiving payment; joins to merchants.merchant_id.
+        references: merchants.merchant_id
+      payment_source_id:
+        type: string
+        description: Card used; joins to cards.payment_source_id.
+        references: cards.payment_source_id
+      transaction_timestamp:
+        type: timestamp
+        description: Purchase completion time.
+      volume_nok:
+        type: decimal
+        unit: NOK
+        description: Purchase value expressed in NOK.
+      revenue_nok:
+        type: decimal
+        unit: NOK
+        description: >
+          NOK amount the fictional payment service retains: a merchant-specific
+          percentage of volume_nok, rounded to two decimals. Before costs; not
+          profit.
+      currency:
+        type: string
+        description: NOK, regardless of user or merchant country.
+        enum: [NOK]
+      user_country:
+        type: string
+        description: >
+          Norway or Denmark, repeated from users.csv for convenience. Not
+          physical location at payment time.
+        enum: [Norway, Denmark]
+      payment_channel:
+        type: string
+        description: >
+          online or in_person, a broad channel rather than device or product
+          feature.
+        enum: [online, in_person]
+    joins:
+      - to: users
+        local_key: user_id
+        remote_key: user_id
+        relationship: many_to_one
+      - to: merchants
+        local_key: merchant_id
+        remote_key: merchant_id
+        relationship: many_to_one
+      - to: cards
+        local_key: payment_source_id
+        remote_key: payment_source_id
+        relationship: many_to_one
+        optional: true
+    caveats:
+      - Failed payments, refunds and transfers are excluded.
+      - Fee percentages are synthetic, fixed per merchant during the year, and do not represent actual Vipps fees.
+      - NOK values are synthetically rescaled, not converted at a historical exchange rate.
+      - International purchases are already in NOK.
+      - Use transactions.user_country for transaction-level country rather than joining users for country.
+
+  users:
+    file: data/raw/users.csv
+    description: One user.
+    grain: [user_id]
+    primary_key: user_id
+    synonyms: [customers, members]
+    columns:
+      user_id:
+        type: string
+        description: Unique user identifier.
+      observation_start_date:
+        type: timestamp
+        description: Start of complete purchase coverage, not signup or first use.
+      vip_enrolled:
+        type: boolean
+        description: >
+          True if enrolled in VIP by the dataset cutoff; false otherwise. Not
+          membership status at every historical purchase.
+      vip_enrolled_at:
+        type: timestamp
+        nullable: true
+        description: >
+          VIP signup time; null for non-members at cutoff. No membership
+          cancellations are modelled.
+      user_country:
+        type: string
+        description: Synthetic residence; authoritative country attribute.
+        enum: [Norway, Denmark]
+      age_bucket:
+        type: string
+        description: >
+          Synthetic age as of 1 January 2025: four-year buckets from 18-21
+          through 78-81.
+        enum:
+          - 18-21
+          - 22-25
+          - 26-29
+          - 30-33
+          - 34-37
+          - 38-41
+          - 42-45
+          - 46-49
+          - 50-53
+          - 54-57
+          - 58-61
+          - 62-65
+          - 66-69
+          - 70-73
+          - 74-77
+          - 78-81
+    joins:
+      - to: cards
+        local_key: user_id
+        remote_key: user_id
+        relationship: one_to_many
+      - to: transactions
+        local_key: user_id
+        remote_key: user_id
+        relationship: one_to_many
+      - to: experiment_exposure
+        local_key: user_id
+        remote_key: user_id
+        relationship: one_to_one
+        optional: true
+    caveats:
+      - All users share the cutoff.
+      - Behaviour before observation_start_date is unknown.
+      - The selected population is not representative of actual customers.
+      - Country and age are generated for the exercise.
+      - vip_enrolled is status at cutoff, not historical membership.
+      - No membership cancellations are modelled.
+
+  merchants:
+    file: data/raw/merchants.csv
+    description: One merchant.
+    grain: [merchant_id]
+    primary_key: merchant_id
+    synonyms: [shops, vendors]
+    columns:
+      merchant_id:
+        type: string
+        description: Unique merchant identifier.
+      merchant_name:
+        type: string
+        description: Fictional grocery, specialist-food or online retailer.
+      merchant_country:
+        type: string
+        description: Country of the merchant.
+        enum: [Norway, Denmark, Sweden, Germany, Netherlands]
+      merchant_mcc_code:
+        type: string
+        nullable: true
+        description: >
+          MCC category; joins to mcc.merchant_mcc_code when known. Missing
+          means unclassified, not "other".
+        references: mcc.merchant_mcc_code
+    joins:
+      - to: mcc
+        local_key: merchant_mcc_code
+        remote_key: merchant_mcc_code
+        relationship: many_to_one
+        optional: true
+      - to: transactions
+        local_key: merchant_id
+        remote_key: merchant_id
+        relationship: one_to_many
+    caveats:
+      - Users can purchase from international merchants.
+      - Grocers support online and in-person payments; non-food retailers accept online payments.
+      - Merchant country is not the transaction currency.
+      - Resemblance of fictional names to actual businesses is incidental.
+
+  mcc:
+    file: data/raw/mcc.csv
+    description: One category.
+    grain: [merchant_mcc_code]
+    primary_key: merchant_mcc_code
+    synonyms: [merchant category, category]
+    columns:
+      merchant_mcc_code:
+        type: string
+        description: Unique Merchant Category Code (MCC).
+      category_name:
+        type: string
+        description: Category description.
+        enum:
+          - Grocery Stores, Supermarkets
+          - Miscellaneous Food Stores
+          - Family Clothing Stores
+          - Electronics Stores
+          - Furniture, Home Furnishings, and Equipment Stores
+          - Book Stores
+    joins:
+      - to: merchants
+        local_key: merchant_mcc_code
+        remote_key: merchant_mcc_code
+        relationship: one_to_many
+    caveats:
+      - This is MCC, not NACE.
+      - Several merchants share a category.
+      - Join transactions to merchants, then merchants to mcc; preserve transaction grain in both joins.
+
+  cards:
+    file: data/raw/cards.csv
+    description: One card/payment source (optional).
+    grain: [payment_source_id]
+    primary_key: payment_source_id
+    synonyms: [payment sources, payment instruments]
+    columns:
+      payment_source_id:
+        type: string
+        description: Unique card identifier used in transactions.
+      user_id:
+        type: string
+        description: Card owner. A user can have several cards.
+        references: users.user_id
+      card_type:
+        type: string
+        description: Synthetic debit or credit.
+        enum: [debit, credit]
+      card_status:
+        type: string
+        description: Active or Inactive as of 1 January 2026.
+        enum: [Active, Inactive]
+      card_scheme:
+        type: string
+        description: visa or mastercard, the network/scheme. Issuing bank is not supplied.
+        enum: [visa, mastercard]
+    joins:
+      - to: users
+        local_key: user_id
+        remote_key: user_id
+        relationship: many_to_one
+      - to: transactions
+        local_key: payment_source_id
+        remote_key: payment_source_id
+        relationship: one_to_many
+    caveats:
+      - Use this optional table only if it supports your chosen question.
+      - No card numbers, expiry dates or security codes are included.
+      - Cutoff status does not describe status at the historical purchase time; an inactive card can have valid earlier purchases.
+      - Check purchase-card ownership using payment_source_id and user_id; joining transactions to all of a user's cards would multiply purchases.
+
+  experiment_exposure:
+    file: data/raw/experiment_exposure.csv
+    description: One allocation per user.
+    grain: [user_id]
+    primary_key: user_id
+    synonyms: [experiment assignment, trial exposure]
+    columns:
+      user_id:
+        type: string
+        description: Eligible non-member allocated to the invitation experiment.
+        references: users.user_id
+      experiment_id:
+        type: string
+        description: vip_invitation_v1, the only experiment.
+        enum: [vip_invitation_v1]
+      variant:
+        type: string
+        description: >
+          control (no invitation) or invitation (assigned a VIP invitation).
+          Not actual membership.
+        enum: [control, invitation]
+      exposure_timestamp:
+        type: timestamp
+        description: >
+          Randomised assignment/start time for either group; not observed
+          interaction or VIP signup.
+    joins:
+      - to: users
+        local_key: user_id
+        remote_key: user_id
+        relationship: one_to_one
+      - to: transactions
+        local_key: user_id
+        remote_key: user_id
+        relationship: one_to_many
+    caveats:
+      - The brief describes eligibility, randomisation and waves.
+      - Allocation applies across all cards and merchants.
+      - Control users can join organically; invited users can decline.
+      - Use vip_enrolled_at when assessing behaviour before and after membership.
+      - Users outside the trial can also be VIP members.
+      - Purchases or signups after cutoff are unobserved.
+      - No invitation interaction events or block identifiers are supplied.
+
+metrics:
+  gmv_nok:
+    description: Total completed purchase value in NOK.
+    table: transactions
+    expression: sum(transactions.volume_nok)
+    synonyms: [sales, spend, purchase volume, turnover]
+  service_revenue_nok:
+    description: Service revenue before costs; not profit.
+    table: transactions
+    expression: sum(transactions.revenue_nok)
+    synonyms: [Vipps revenue, fees]
+  transaction_count:
+    description: Number of completed purchases.
+    table: transactions
+    expression: count(transactions.transaction_id)
+  active_users:
+    description: Number of distinct users with at least one purchase.
+    table: transactions
+    expression: count(DISTINCT transactions.user_id)
+  avg_transaction_nok:
+    description: Average completed purchase value in NOK.
+    table: transactions
+    expression: sum(transactions.volume_nok) / nullif(count(transactions.transaction_id), 0)
+  gmv_per_active_user_nok:
+    description: Average GMV per active user in NOK.
+    table: transactions
+    expression: sum(transactions.volume_nok) / nullif(count(DISTINCT transactions.user_id), 0)
+  online_share:
+    description: Share of GMV from online purchases, as a ratio between 0 and 1.
+    table: transactions
+    expression: >
+      sum(CASE WHEN transactions.payment_channel = 'online'
+      THEN transactions.volume_nok ELSE 0 END)
+      / nullif(sum(transactions.volume_nok), 0)
+  vip_user_count:
+    description: Number of users enrolled in VIP at cutoff.
+    table: users
+    expression: count(*) FILTER (WHERE users.vip_enrolled)
+  vip_share:
+    description: Share of users enrolled in VIP at cutoff, as a ratio between 0 and 1.
+    table: users
+    expression: avg(CASE WHEN users.vip_enrolled THEN 1.0 ELSE 0.0 END)
+
+dimensions:
+  transaction_date:
+    table: transactions
+    column: transaction_timestamp
+    type: timestamp
+    grains: [day, week, month, quarter]
+  payment_channel:
+    table: transactions
+    column: payment_channel
+    enum: [online, in_person]
+  transaction_user_country:
+    table: transactions
+    column: user_country
+    enum: [Norway, Denmark]
+    note: Use this for transaction-level country; it is repeated from users.
+  merchant_country:
+    table: merchants
+    column: merchant_country
+    enum: [Norway, Denmark, Sweden, Germany, Netherlands]
+  mcc_category:
+    table: mcc
+    column: category_name
+  age_bucket:
+    table: users
+    column: age_bucket
+  vip_status:
+    table: users
+    column: vip_enrolled
+    type: boolean
+    note: Status at cutoff, not historical membership.
+  experiment_variant:
+    table: experiment_exposure
+    column: variant
+    enum: [control, invitation]
+    note: Assignment, not actual membership.
+  card_type:
+    table: cards
+    column: card_type
+    enum: [debit, credit]
+  card_scheme:
+    table: cards
+    column: card_scheme
+    enum: [visa, mastercard]
+
+global_caveats:
+  - CSV files are UTF-8 with headers.
+  - Identifiers and MCC codes are strings.
+  - Timestamps use a common fictional clock; no timezone conversion is needed.
+  - The cutoff is 2026-01-01 00:00:00, exclusive.
+  - Empty fields mean missing, not zero.
+  - The data is synthetic and not representative of actual customers.
+  - transactions contains only completed positive purchases; failed payments, refunds, and transfers are excluded.

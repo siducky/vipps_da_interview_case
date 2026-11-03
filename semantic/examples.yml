@@ -1,0 +1,106 @@
+examples:
+  - question: "What was total GMV in 2025?"
+    sql: |
+      SELECT sum(volume_nok) AS gmv_nok
+      FROM transactions
+      WHERE transaction_timestamp >= TIMESTAMP '2025-01-01 00:00:00'
+        AND transaction_timestamp < TIMESTAMP '2026-01-01 00:00:00';
+    notes: "Uses the transaction grain; no joins required."
+
+  - question: "What was GMV by payment channel?"
+    sql: |
+      SELECT
+        payment_channel,
+        sum(volume_nok) AS gmv_nok
+      FROM transactions
+      GROUP BY payment_channel
+      ORDER BY gmv_nok DESC;
+    notes: "payment_channel is a broad channel, not a device or product feature."
+
+  - question: "Which merchants had the highest GMV?"
+    sql: |
+      SELECT
+        m.merchant_name,
+        sum(t.volume_nok) AS gmv_nok
+      FROM transactions AS t
+      JOIN merchants AS m USING (merchant_id)
+      GROUP BY m.merchant_name
+      ORDER BY gmv_nok DESC
+      LIMIT 10;
+    notes: "Joins on merchant_id; each transaction still maps to one merchant."
+
+  - question: "What share of GMV was online in each user country?"
+    sql: |
+      SELECT
+        user_country,
+        sum(CASE WHEN payment_channel = 'online' THEN volume_nok ELSE 0 END) AS online_gmv_nok,
+        sum(volume_nok) AS total_gmv_nok,
+        round(
+          100.0 * sum(CASE WHEN payment_channel = 'online' THEN volume_nok ELSE 0 END)
+          / nullif(sum(volume_nok), 0),
+          2
+        ) AS online_share_pct
+      FROM transactions
+      GROUP BY user_country
+      ORDER BY user_country;
+    notes: "Uses transactions.user_country; no users join is required for transaction-level country."
+
+  - question: "What is average transaction value by age bucket?"
+    sql: |
+      SELECT
+        u.age_bucket,
+        count(*) AS transactions,
+        round(avg(t.volume_nok), 2) AS avg_transaction_nok
+      FROM transactions AS t
+      JOIN users AS u USING (user_id)
+      GROUP BY u.age_bucket
+      ORDER BY u.age_bucket;
+    notes: "age_bucket is synthetic and fixed as of 1 January 2025."
+
+  - question: "How do VIP and non-VIP users compare on GMV per user?"
+    sql: |
+      SELECT
+        u.vip_enrolled,
+        count(DISTINCT u.user_id) AS users,
+        sum(t.volume_nok) AS gmv_nok,
+        round(
+          sum(t.volume_nok) / nullif(count(DISTINCT u.user_id), 0),
+          2
+        ) AS gmv_per_user_nok
+      FROM transactions AS t
+      JOIN users AS u USING (user_id)
+      GROUP BY u.vip_enrolled
+      ORDER BY u.vip_enrolled;
+    notes: "vip_enrolled is membership status at cutoff, not historical status."
+
+  - question: "What is the GMV share by card type?"
+    sql: |
+      SELECT
+        c.card_type,
+        count(*) AS transactions,
+        sum(t.volume_nok) AS gmv_nok,
+        round(
+          100.0 * sum(t.volume_nok) / nullif((SELECT sum(volume_nok) FROM transactions), 0),
+          2
+        ) AS gmv_share_pct
+      FROM transactions AS t
+      JOIN cards AS c ON t.payment_source_id = c.payment_source_id
+      GROUP BY c.card_type
+      ORDER BY gmv_nok DESC;
+    notes: "Join on payment_source_id, not user_id, to preserve transaction grain."
+
+  - question: "Did the VIP invitation increase VIP signup rates?"
+    sql: |
+      SELECT
+        e.variant,
+        count(*) AS users,
+        count(u.vip_enrolled_at) AS vip_signups,
+        round(
+          100.0 * count(u.vip_enrolled_at) / nullif(count(*), 0),
+          2
+        ) AS vip_signup_rate_pct
+      FROM experiment_exposure AS e
+      JOIN users AS u USING (user_id)
+      GROUP BY e.variant
+      ORDER BY e.variant;
+    notes: "Measures any VIP signup by cutoff; variant is random assignment, not actual membership."

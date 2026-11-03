@@ -1,0 +1,45 @@
+[project]
+name = "vipps-da-case"
+version = "0.1.0"
+description = "Vipps Data Analyst interview case: marimo analysis and semantic model"
+readme = "README.md"
+authors = [
+    { name = "siducky", email = "siddhant@ducky.eco" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "altair>=6.3.0",
+    "duckdb==1.5.4",
+    "marimo>=0.25.2",
+    "pandas>=3.1.0",
+    "pyyaml>=6.0.3",
+    "scipy>=1.18.1",
+]
+
+[project.scripts]
+vipps-da-case = "vipps_da_case:main"
+
+[build-system]
+requires = ["uv_build>=0.12.7,<0.13.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "ruff>=0.17.3",
+]
+
+[tool.ruff]
+# Agent tooling and its bundled skill docs are not project code; ruff 0.17
+# also formats Python blocks inside markdown, which would rewrite vendored
+# reference material.
+extend-exclude = [".opencode"]
+
+[tool.ruff.lint.per-file-ignores]
+# marimo writes a bare `return` at the end of display cells to mark the output;
+# it is not "useless" in that context.
+"notebooks/*.py" = ["PLR1711"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
