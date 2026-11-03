@@ -18,6 +18,7 @@ in place, and `make check` and `make test` pass.
 |---|---|---|
 | Analysis workbook | [`notebooks/case_analysis.py`](notebooks/case_analysis.py) | EDA, data-quality checks, event study, experiment evaluation, sizing, mart appendix |
 | Interactive deck | [`notebooks/vip_presentation.py`](notebooks/vip_presentation.py) | 11 slides, live widgets, Vipps visual identity |
+| Deck PDF | [`vip_presentation.pdf`](vip_presentation.pdf) | 11-page 16:9 export of the deck, default widget settings |
 | Static deck layout | [`notebooks/layouts/vip_presentation.slides.json`](notebooks/layouts/vip_presentation.slides.json) | Slide ordering and per-cell settings |
 | Analytical marts | `data/processed/*.csv` | Generated on every analysis run (git-ignored) |
 | Semantic model | [`semantic/model.yml`](semantic/model.yml) | Tables, joins, metrics, dimensions |
@@ -26,6 +27,7 @@ in place, and `make check` and `make test` pass.
 | Model viewer | [`notebooks/data_model.py`](notebooks/data_model.py) | Renders the ERD and dictionary |
 | Plot archive | [`plots/`](plots/README.md) | 12 PNGs grouped by question |
 | Plot exporter | [`scripts/export_plots.py`](scripts/export_plots.py) | Rebuilds `plots/` from the deck's charts |
+| PDF exporter | [`scripts/export_deck_pdf.py`](scripts/export_deck_pdf.py) | Rebuilds `vip_presentation.pdf` from the deck |
 | Data notes | [`data/README.md`](data/README.md) | Provenance, file grain, row counts, column dictionary |
 
 ## The question
@@ -33,12 +35,10 @@ in place, and `make check` and `make test` pass.
 The case asks whether VIP is creating loyalty or selecting for it, and what the
 team should do next. The work is split into three questions:
 
-1. **Q1 — Selection.** Do future VIP members already behave differently before
-   they enrol?
+1. **Q1 — Selection.** Do people who join VIP buy more or less than non VIP users?
 2. **Q2 — Causal effect.** Among invited users, does invitation change sign-up,
    retention and spend?
-3. **Q3 — Next steps.** Where is the commercial headroom, and what should be
-   tested next?
+3. **Q3 — Next steps.** Where is the commercial headroom, and what should the team do next?
 
 ## Quickstart
 
@@ -55,6 +55,8 @@ Other entry points:
 ```bash
 make app         # read-only app mode for the analysis workbook
 make model       # open the data model viewer
+make deck        # open the presentation deck
+make deck-pdf    # rebuild vip_presentation.pdf
 make check       # semantic tests + marimo checks + ruff lint/format
 make test        # pytest (20 tests)
 make db          # build data/processed/vipps.duckdb views from the semantic model
@@ -62,14 +64,13 @@ make export      # check, then build reports/case_analysis.html and site/ (WASM)
 make clean       # remove site/ and caches
 ```
 
-Targets are lowercase and case-sensitive; `make` alone prints the menu. The deck
-has no dedicated target, so open it directly:
+Targets are lowercase and case-sensitive; `make` alone prints the menu. If you
+prefer marimo directly:
 
 ```bash
-uv run marimo edit notebooks/vip_presentation.py
+uv run marimo edit notebooks/vip_presentation.py   # equivalent to make deck
+uv run marimo run notebooks/vip_presentation.py    # read-only presentation
 ```
-
-For a read-only presentation, use `uv run marimo run notebooks/vip_presentation.py`.
 
 ## Regenerate everything
 
@@ -85,7 +86,8 @@ data/processed/df_weekly_panel.csv     20,725 user-weeks × 14 cols
       │
       ├──▶ notebooks/case_analysis.py   (EDA → Q1 → Q2 → Q3 → mart appendix)
       ├──▶ notebooks/vip_presentation.py (11 slides, reads the marts)
-      └──▶ plots/*.png                   (scripts/export_plots.py)
+      ├──▶ plots/*.png                   (scripts/export_plots.py)
+      └──▶ vip_presentation.pdf          (scripts/export_deck_pdf.py)
 ```
 
 To rebuild from scratch:
@@ -95,6 +97,7 @@ rm -rf data/processed                    # start clean, optional
 make setup
 uv run marimo export html notebooks/case_analysis.py -o reports/case_analysis.html
 uv run --with vl-convert-python python scripts/export_plots.py
+make deck-pdf
 make check && make test
 ```
 
@@ -111,8 +114,11 @@ can be opened and presented on a fresh clone.
 ```text
 vipps_da_interview_case/
 ├── Case_Brief.pdf                  # original case prompt
+├── LICENSE
+├── README.md                       # this file
 ├── Makefile                        # every routine command
 ├── pyproject.toml                  # dependencies, ruff and pytest config
+├── vip_presentation.pdf            # 11-page 16:9 deck (make deck-pdf)
 ├── data/
 │   ├── raw/                        # immutable case CSVs + data dictionary PDF
 │   ├── processed/                  # generated marts (git-ignored)
@@ -130,11 +136,14 @@ vipps_da_interview_case/
 │   ├── marts.yml                   # mart grain, keys, columns, semantics
 │   └── marts_erd.md                # mart ER diagram
 ├── plots/                          # exported PNGs, grouped by question
-├── scripts/export_plots.py         # PNG exporter (vl-convert)
+├── scripts/
+│   ├── export_plots.py             # PNG exporter (vl-convert)
+│   └── export_deck_pdf.py          # deck → PDF exporter (playwright)
 ├── tests/                          # semantic-model and mart-doc tests
-├── reports/                        # static HTML backup (make export-html)
 └── agent_prompts/                  # working notes from the case, not analysis code
 ```
+
+`data/processed/` and `reports/` are created on demand and git-ignored.
 
 ## Notebooks
 
@@ -158,30 +167,6 @@ Ten sections plus an appendix, in the order a reviewer would want them:
 
 The notebook writes the three marts to `data/processed/` as a side effect of
 running, which is why it must run before the deck if you want the CSVs on disk.
-
-### `vip_presentation.py`
-
-Eleven slides, 16:9, no vertical scrolling at the deck's width (`medium`,
-≈1345 × 756 CSS px):
-
-1. Title: *Does VIP create lasting customer loyalty?*
-2. Executive summary: four findings, one recommendation.
-3. Context: *Two distinct products in one* — in-person vs online comparison.
-4. Retention framework: what "coming back" means, silence days and survival.
-5. Q1: VIP members spent and purchased more, full year and pre-launch views.
-6. Q1: within-user event study around enrolment.
-7. Q2: *The invitation increased VIP enrollment* — baseline balance and take-up.
-8. Q2: *The invitation did not show a clear change in retention or spend* — 16-week ITT.
-9. Q3: channel economics and an illustrative online cross-sell scenario.
-10. Q3: deferred analyses and why they were deferred.
-11. Appendix: sources, lineage and the AI-assisted workflow.
-
-Every slide except 1, 2, 10 and 11 owns its widgets: sliders and toggles named
-`ui_sN_*` are read only by `slide_N`, so moving a control reruns one slide, not
-the deck. The slide counter badge in each header is a static `NN / 11`.
-
-The deck uses the Vipps palette throughout: `#FFFAF7` canvas, `#0B1F3A` navy,
-`#FF5B24` orange, `#2F6DB3` blue, `#526176` body text, `#8C8C8C` muted.
 
 ## Data
 
@@ -225,59 +210,6 @@ wave, 43 in December). Coverage matters: 385 users have purchases observable
 from 2025-01-01 (`is_full_year_obs`), and 34 start later, so they are excluded
 from full-year comparisons.
 
-**Event study (Q1).** Weekly purchases and GMV are aligned to each VIP member's
-enrolment week (week 0) and averaged across users with a complete ±8-week window.
-No synthetic control group is drawn; the point is the within-user shape.
-
-**Experiment (Q2).** Intent-to-treat comparison of invited vs control users over
-16 weeks from exposure, on weekly purchases, weekly GMV, active-week share and
-28-day retention. Take-up is reported separately because roughly 8% of control
-users enrol without an invitation.
-
-**Statistical tools.** Only transparent, textbook tests are used:
-
-- Two-sample Welch t-test (`scipy.stats.ttest_ind`, `equal_var=False`) for
-  between-group comparisons of means.
-- Paired t-test (`scipy.stats.ttest_rel`) for within-user pre/post comparisons.
-- Pooled two-proportion z-test for sign-up rates.
-- Normal-approximation 95% confidence intervals: `diff ± 1.96 × se`.
-- Complier-scaled ITT: divide the ITT effect by the net sign-up lift (0.602) to
-  approximate the effect on actual joiners.
-
-**Deliberately not used.** No regression adjustment, no propensity matching, no
-Wilson intervals, no round-robin or synthetic-control matching. With 269
-experiment users each of those would add machinery and opacity without adding
-identifying power. Where a point estimate is not significant, the deck says so
-rather than dressing it up.
-
-## Headline findings
-
-- **Selection dominates the raw gap.** Before VIP launched, future VIP members
-  already spent 1.09× more per week and bought 1.10× more often than never-VIPs
-  (Jan–Apr, full-year users). The full-year gap is not evidence of a VIP effect.
-- **Invitation works as a nudge.** In the summer wave, sign-up rose from 8.0%
-  (control) to 68.1% (invited), +60.2 pp, p < 0.001.
-- **The loyalty effect is not yet visible.** Over 16 weeks the invitation changed
-  purchases by +4.7% (p = 0.50), GMV by −0.5% (p = 0.96) and 28-day retention by
-  +10.7% (p = 0.25). All intervals cross zero: the direction is plausible, the
-  evidence is thin.
-- **Online is the thinner but scalable margin.** Take rate is 1.95% online versus
-  1.29% in person; online is 30.7% of GMV. Cross-selling online is the lever worth
-  testing, and only at a point cost well under the take rate (50 bps of GMV is
-  ~26% of the online fee).
-
-## Deferred analyses
-
-Each was considered and parked, with the reason on slide 10:
-
-- **`cards.csv` (1,203 rows).** Card status exists only at the 2026-01-01 cutoff,
-  so using it would leak future information into 2025 behaviour; it is also
-  card-level, not user-level. Revisit when card history exists.
-- **16 age buckets.** 419 users across 16 four-year bands is ~26 per band and ~7
-  per experiment arm, too few to compare reliably. Revisit with wider bands or
-  pooled years.
-- **December retention.** 43 users exposed in December have too little
-  post-exposure observation before the cutoff. Revisit in Q1 2026.
 
 ## Plot archive
 
@@ -292,6 +224,34 @@ The exporter executes the deck headlessly, reads each Vega-Lite spec from the
 rendered HTML, and rasterises it. Charts are matched by **title**, so if you
 rename a chart, update `MAPPING` in `scripts/export_plots.py` or it will be
 skipped.
+
+## Deck PDF
+
+[`vip_presentation.pdf`](vip_presentation.pdf) is an 11-page, 16:9 PDF of the
+deck at its default widget settings, committed so the deck can be shared without
+running anything.
+
+```bash
+make deck-pdf
+# equivalent to:
+uv run --with playwright --with pillow python scripts/export_deck_pdf.py
+```
+
+The script executes the notebook to a self-contained HTML file, opens it in
+headless Chromium, walks the 11 slides, and screenshots each slide canvas at
+2690 × 1512 px (the deck's 1345 × 756 design size at 2x), then stitches the
+pages at 200 dpi. Widget controls and reveal's navigation chrome are hidden, so
+each page shows the chart exactly as it appears with the default selections.
+
+`marimo export pdf --as=slides` also works, but it renders reveal at its default
+960 × 700 stage, which letterboxes a 16:9 deck into a 4:3 page and can clip the
+tallest slides; that is why this repo ships its own exporter.
+
+First run on a fresh machine needs a browser:
+
+```bash
+uv run --with playwright playwright install chromium
+```
 
 ## Checks, tests and formatting
 
@@ -347,16 +307,15 @@ print('roundtrip:', MarimoConvert.from_py(src).to_py() == src)"
 - `reports/`, `site/` and `plots/` are generated: `reports/` and `site/` are
   rebuilt by `make export`, and `plots/` is committed so reviewers can read the
   charts without running anything.
+- `vip_presentation.pdf` is generated by `make deck-pdf` and committed so the
+  deck travels without a browser or a Python environment.
 
 ## AI-assisted workflow
 
 AI models accelerated the SQL scaffolding, the marimo UI and the Altair/CSS
 layout (Gemini 4 Argon for framing and methodology critique, DeepSeek V4.1 for
 implementation). Every number in the deck was then re-derived and checked by
-hand against the raw data: row and null counts against `data/README.md`,
-degenerate metrics rejected, late-coverage and right-censored cohorts isolated,
-and black-box estimators replaced with the transparent t-tests listed above.
-The analysis is only as good as those checks, not the tool that typed it.
+hand against the raw data. The analysis is only as good as those checks, not the tool that typed it.
 
 ## Limitations
 
@@ -376,4 +335,3 @@ The analysis is only as good as those checks, not the tool that typed it.
 The case data is synthetic and uses fictional merchants. Confirm permission
 before publishing raw files. Do not commit real customer data, PII, credentials
 or confidential fields. This repository is not affiliated with Vipps.
->>>>>>> 16f345c (first iteration case study)

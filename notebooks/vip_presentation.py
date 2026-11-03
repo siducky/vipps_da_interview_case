@@ -26,6 +26,9 @@ with app.setup(hide_code=True):
     BLUE = "#2F6DB3"
     GREY = "#8C8C8C"
 
+    # Single source of truth for the deck's repository link.
+    REPO_URL = "https://github.com/siducky/vipps_da_interview_case"
+
     VIPPS_CSS = """
     <style>
     .reveal-viewport {
@@ -1000,9 +1003,9 @@ def slide_1():
       <div class="vipps-accent"></div>
       <div class="vipps-kicker">VIPPS · CASE INTERVIEW</div>
 
-      <h1>Does VIP create lasting customer loyalty?</h1>
+      <h1>Does VIP create customer loyalty?</h1>
       <p class="vipps-subtitle">
-        Assessing VIP’s impact on spending, retention, and engagement; then translaing the evidence into a recommendation and next steps.
+        Assessing VIP’s impact on spending, retention, and engagement.
       </p>
 
       <div class="vipps-metrics">
@@ -1028,12 +1031,12 @@ def slide_1():
         <div class="vipps-card">
           <div class="number">01 · DEFINE</div>
           <h3>How do we measure loyalty?</h3>
-          <p>Define “keep coming back” in a way that reflects how customers use the service.</p>
+          <p>Define “Keep coming back” in a way that reflects how customers use the service.</p>
         </div>
         <div class="vipps-card">
           <div class="number">02 · EVALUATE</div>
           <h3>Does VIP change behaviour?</h3>
-          <p>Compare spending, retention, and engagement across VIP and experiment groups.</p>
+          <p>Compare spending, retention, and engagement across VIP and non VIP users, experiment & control groups.</p>
         </div>
         <div class="vipps-card">
           <div class="number">03 · RECOMMEND</div>
@@ -1045,6 +1048,8 @@ def slide_1():
       <div class="vipps-footer">
         <span class="vipps-footer-mark"></span>
         <span>From defining loyalty to evaluating impact and recommending action</span>
+        <a href="{REPO_URL}" target="_blank" rel="noopener"
+           style="color:#FF5B24;font-weight:700;text-decoration:none;border-bottom:1px solid #FF5B24;margin-left:auto;">Repository ↗</a>
       </div>
     </div>
     """
@@ -2663,7 +2668,7 @@ def slide_7():
                         letter-spacing:1.5px;
                         text-transform:uppercase;
                         margin-bottom:8px;
-                    ">Q2 · Do </div>
+                    ">Q2 · Does inviting people to join VIP help in making them come back? </div>
                     <div style="
                         color:#0B1F3A;
                         font-size:26px;
@@ -3043,7 +3048,7 @@ def slide_8():
                         letter-spacing:1.5px;
                         text-transform:uppercase;
                         margin-bottom:8px;
-                    ">Q2 · Invitation experiment</div>
+                    ">Q2 · Does inviting people to join VIP help in making them come back?</div>
                     <div style="
                         color:#0B1F3A;
                         font-size:26px;
@@ -3501,7 +3506,7 @@ def slide_10():
                         letter-spacing:1.5px;
                         text-transform:uppercase;
                         margin-bottom:8px;
-                    ">Q3 · Analytical prioritization</div>
+                    ">Q3 · Recommendations &amp; next steps</div>
                     <div style="
                         color:#0B1F3A;
                         font-size:26px;
@@ -3509,7 +3514,7 @@ def slide_10():
                         font-weight:800;
                         letter-spacing:-0.5px;
                     ">
-                        What we left for later—and why
+                        What we left for later
                     </div>
                     <div style="
                         color:#526176;
@@ -3693,7 +3698,7 @@ def slide_10():
 @app.cell(hide_code=True)
 def slide_11():
     # Appendix: sources, data lineage, and the AI-assisted workflow.
-    mo.Html("""
+    mo.Html(f"""
         <div style="
             box-sizing:border-box;
             width:100%;
@@ -3763,7 +3768,8 @@ def slide_11():
                     <div style="font-size:11.5px;line-height:1.5;color:#526176;">
                         <div style="margin-top:6px;">
                             <b style="color:#0B1F3A;font-weight:750;">GitHub Repository</b> —
-                            vipps_da_interview_case
+                            <a href="{REPO_URL}" target="_blank" rel="noopener"
+                               style="color:#FF5B24;font-weight:700;text-decoration:none;border-bottom:1px solid #FF5B24;">vipps_da_interview_case</a>
                         </div>
                         <div style="margin-top:6px;">
                             <b style="color:#0B1F3A;font-weight:750;">Full Analysis Workbook</b> —
