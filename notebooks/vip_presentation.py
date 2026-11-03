@@ -1196,9 +1196,7 @@ def slide_2():
         </h1>
 
         <p class="vipps-summary-lede">
-            VIP enrollment is associated with higher activity, but the invitation
-            experiment does not show a significant retention lift. The clearest
-            next step is to test targeted cross-selling and improve measurement.
+           Customers don't gradually slow down: They either use us multiple times a day or stop completely (~29% churn before year-end).
         </p>
 
         <div class="vipps-summary-grid">
@@ -1236,24 +1234,22 @@ def slide_2():
                     Signup increased from <strong>8.0%</strong> to
                     <strong>68.1%</strong>
                     <span class="vipps-orange">(+60.2 pp)</span>
-                    (<strong>p &lt; 0.001</strong>). After 16 weeks, ITT effects were
-                    <span class="vipps-orange">4.7%</span> on purchases and
-                    <span class="vipps-orange">-0.5%</span> on GMV; no retention
-                    metric was significant.
+                    (<strong>p &lt; 0.001</strong>).  However,
+                    it produced no statistically significant lift in retention or spend 
+                    (<span class="vipps-orange">4.7%</span> purchases , <span class="vipps-orange">-0.5%</span> GMV).
                 </p>
             </div>
 
             <div class="vipps-summary-card">
                 <div class="vipps-summary-card-label">04 · What to do next</div>
-                <h2>Test cross-sell and anti-churn</h2>
+                <h2>Passive signup nudges aren't enough</h2>
                 <p>
-                    Online take rate is
+                    Test 14-day inactivity reminders. Online checkout point multipliers
+                    (Online take rate is
                     <span class="vipps-orange">{_c["online_take"]:.2%}</span>
                     versus
                     <span class="vipps-orange">{_c["inperson_take"]:.2%}</span>
-                    for in-person. Shifting customers to online could increase
-                    revenue. To reduce churn, try 14-day reminders instead of
-                    batch invitations.
+                    for in-person).
                 </p>
             </div>
         </div>
@@ -2797,8 +2793,6 @@ def slide_8():
     _metrics = [
         ("Retained in last 28 days", "retained_last_28d", "share"),
         ("Active week share", f"post_active_week_share_{_w}w", "share"),
-        ("In-person active week share", f"in_person_active_week_share_{_w}w", "share"),
-        ("Online active month share", f"online_active_month_share_{_w}w", "share"),
         ("Purchases per week", f"post_tx_per_week_{_w}w", "count"),
         ("GMV per week", f"post_gmv_per_week_{_w}w", "money"),
     ]
@@ -3389,9 +3383,8 @@ def slide_9():
                 margin-bottom:8px;
             ">Ideas to test</div>
             <div style="font-size:14px;line-height:1.65;">
-                <b>1.</b> Send a reminder after a period of inactivity.<br>
-                <b>2.</b> Test point multipliers to encourage online purchases.<br>
-                <b>3.</b> Track invite opens, clicks, purchases, and point redemption.<br>
+                <b>1.</b> Replace batch signup invites with a 14-day inactivity trigger <br>
+                <b>2.</b> Test online checkout point multipliers to encourage online purchases.<br>
             </div>
         </div>
     """)
@@ -3568,9 +3561,8 @@ def slide_10():
                                     </div>
                                     <div style="font-size:12px;line-height:1.5;color:#526176;">
                                         <b style="color:#0B1F3A;">Why deferred</b><br>
-                                        Card status is only known at the 2026-01-01 cutoff, so it
-                                        would leak future information into 2025 behaviour. It is
-                                        also card-level, not user-level.
+                                        Card status is only known at the 2026-01-01 cutoff, not historical
+                                        purchase time. Optional table, so not investigated further.
                                     </div>
                                     <div style="
                                         margin-top:14px;
