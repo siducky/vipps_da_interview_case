@@ -1196,6 +1196,7 @@ def slide_2():
     }}
     .vipps-design-list li {{
         margin-bottom:clamp(2px, 0.2788vw, 4px);
+        font: inherit;
     }}
     .vipps-design-list li:last-child {{
         margin-bottom: 0;
@@ -4058,7 +4059,7 @@ def slide_12():
                             Marimo Slides + Altair
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
-    
+
                         </div>
                     </div>
                 </div>
