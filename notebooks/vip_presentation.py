@@ -992,7 +992,7 @@ def slide_1():
     </style>
 
     <div class="vipps-slide">
-    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">01<span style="color:#8C8C8C;"> / 11</span></div>
+    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">01<span style="color:#8C8C8C;"> / 12</span></div>
       <div class="vipps-accent"></div>
       <div class="vipps-kicker">VIPPS · CASE INTERVIEW</div>
 
@@ -1053,6 +1053,265 @@ def slide_1():
 
 @app.cell(hide_code=True)
 def slide_2():
+    _exp = D["df_exp"]
+    _n_assigned = len(_exp)
+    _n_invite = int(_exp["variant"].eq("invitation").sum())
+    _n_control = int(_exp["variant"].eq("control").sum())
+    _n_summer = int(_exp["experiment_wave"].eq("summer").sum())
+    _n_december = int(_exp["experiment_wave"].eq("december").sum())
+
+    experiment_html = f"""
+    <style>
+    .vipps-design {{
+        box-sizing: border-box;
+        width: 100%;
+        padding:clamp(18px, 2.0931vw, 30px) clamp(21.6px, 2.5126vw, 36px);
+        background: #FFFAF7;
+        color: #0B1F3A;
+        border-radius:clamp(10.8px, 1.2558vw, 18px);
+        font-family: Inter, Arial, sans-serif;
+        position: relative;
+    }}
+    .vipps-design *,
+    .vipps-design h1,
+    .vipps-design h2,
+    .vipps-design strong {{
+        box-sizing: border-box;
+        font-family: Inter, Arial, sans-serif;
+    }}
+    .vipps-design-accent {{
+        height:clamp(6px, 0.4881vw, 7px);
+        margin-bottom:clamp(14.4px, 1.6744vw, 24px);
+        background: #FF5B24;
+        border-radius:clamp(6px, 0.5585vw, 8px);
+    }}
+    .vipps-design-kicker {{
+        margin-bottom:clamp(6px, 0.6974vw, 10px);
+        color: #FF5B24;
+        font-size:clamp(7.2px, 0.8372vw, 12px);
+        font-weight: 700;
+        letter-spacing: 1.4px;
+        text-transform: uppercase;
+    }}
+    .vipps-design h1 {{
+        max-width: 900px;
+        margin: 0 0 10px;
+        color: #0B1F3A;
+        font-size:clamp(18px, 2.0931vw, 30px);
+        font-weight: 700;
+        line-height: 1.2;
+        letter-spacing: -0.7px;
+    }}
+    .vipps-design-lede {{
+        max-width: 930px;
+        margin: 0 0 clamp(14.4px, 1.6744vw, 24px);
+        color: #536174;
+        font-size:clamp(9px, 1.0465vw, 15px);
+        line-height: 1.5;
+    }}
+    .vipps-design-grid {{
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap:clamp(8.4px, 0.9771vw, 14px);
+    }}
+    .vipps-design-card {{
+        min-width: 0;
+        padding:clamp(11.4px, 1.3262vw, 19px) clamp(12px, 1.3957vw, 20px);
+        background: #FFFFFF;
+        border: 1px solid #E8E1DC;
+        border-radius:clamp(7.2px, 0.8372vw, 12px);
+    }}
+    .vipps-design-step {{
+        display: flex;
+        align-items: center;
+        gap:clamp(5px, 0.5585vw, 8px);
+        margin-bottom:clamp(5px, 0.5585vw, 8px);
+    }}
+    .vipps-design-step .num {{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width:clamp(13px, 1.2558vw, 18px);
+        height:clamp(13px, 1.2558vw, 18px);
+        border-radius: 999px;
+        background: #FF5B24;
+        color: #FFFFFF;
+        font-size:clamp(6.6px, 0.6974vw, 10px);
+        font-weight: 800;
+    }}
+    .vipps-design-step .label {{
+        color: #FF5B24;
+        font-size:clamp(6.6px, 0.7678vw, 11px);
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }}
+    .vipps-design-card h2 {{
+        margin: 0 0 6px;
+        color: #0B1F3A;
+        font-size:clamp(10.2px, 1.1864vw, 17px);
+        font-weight: 700;
+        line-height: 1.3;
+    }}
+    .vipps-design-card p {{
+        margin: 0;
+        color: #536174;
+        font-size:clamp(7.8px, 0.9076vw, 13px);
+        font-weight: 400;
+        line-height: 1.55;
+    }}
+    .vipps-design-card p + p {{
+        margin-top: 6px;
+    }}
+    .vipps-design-stats {{
+        display: flex;
+        gap:clamp(6px, 0.6974vw, 10px);
+        margin-top:clamp(7.8px, 0.9076vw, 13px);
+    }}
+    .vipps-design-stat {{
+        flex: 1;
+        padding:clamp(5px, 0.5585vw, 8px) clamp(6px, 0.5585vw, 8px);
+        background: #FFFAF7;
+        border: 1px solid #F0E5DF;
+        border-radius:clamp(5px, 0.5585vw, 8px);
+    }}
+    .vipps-design-stat strong {{
+        display: block;
+        color: #0B1F3A;
+        font-size:clamp(10.2px, 1.1864vw, 17px);
+        font-weight: 800;
+        line-height: 1.2;
+    }}
+    .vipps-design-stat span {{
+        color: #536174;
+        font-size:clamp(6.6px, 0.6974vw, 10px);
+        line-height: 1.3;
+    }}
+    .vipps-design-list {{
+        margin: 4px 0 0;
+        padding-left:clamp(10.8px, 1.2558vw, 18px);
+        color: #536174;
+        font-size:clamp(7.8px, 0.9076vw, 13px);
+        line-height: 1.5;
+    }}
+    .vipps-design-list li {{
+        margin-bottom:clamp(2px, 0.2788vw, 4px);
+    }}
+    .vipps-design-list li:last-child {{
+        margin-bottom: 0;
+    }}
+    .vipps-design-list strong {{
+        color: #0B1F3A;
+        font-weight: 700;
+    }}
+    .vipps-design-bottomline {{
+        margin-top:clamp(10.8px, 1.2558vw, 18px);
+        padding:clamp(7.8px, 0.9076vw, 13px) clamp(9.6px, 1.1169vw, 16px);
+        background: #0B1F3A;
+        color: #FFFFFF;
+        border-radius:clamp(7.2px, 0.8372vw, 12px);
+        font-size:clamp(7.8px, 0.9076vw, 13px);
+        line-height: 1.5;
+    }}
+    .vipps-design-bottomline strong {{
+        color: #FF8A62;
+        font-weight: 700;
+    }}
+    </style>
+
+    <div class="vipps-design">
+        <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">02<span style="color:#8C8C8C;"> / 12</span></div>
+        <div class="vipps-design-accent"></div>
+        <div class="vipps-design-kicker">Q2 · The invitation experiment</div>
+
+        <h1>
+            Randomised invitations,<br>
+            <span style="color:#FF5B24;">measured from the moment of assignment</span>
+        </h1>
+
+        <p class="vipps-design-lede">
+            Eligible non-members were randomly assigned to receive one VIP invitation or
+            none, within blocks of similar June purchase frequency. We compare the two
+            groups-
+        </p>
+
+        <div class="vipps-design-grid">
+            <div class="vipps-design-card">
+                <div class="vipps-design-step"><span class="num">1</span><span class="label">Who</span></div>
+                <h2>Non-members who bought in June</h2>
+                <p>
+                    Not a VIP member before the experiment, at least one June purchase,
+                    and purchase coverage since 1 January 2025.
+                </p>
+                <div class="vipps-design-stats">
+                    <div class="vipps-design-stat"><strong>{_n_assigned}</strong><span>assigned</span></div>
+                    <div class="vipps-design-stat"><strong>{_n_invite}</strong><span>invitation</span></div>
+                    <div class="vipps-design-stat"><strong>{_n_control}</strong><span>control</span></div>
+                </div>
+            </div>
+
+            <div class="vipps-design-card">
+                <div class="vipps-design-step"><span class="num">2</span><span class="label">How</span></div>
+                <h2>Randomised, roughly 50/50</h2>
+                <p>
+                    Assignment is random within blocks of similar June purchase frequency,
+                    so the arm are comparable before any invitation is sent.
+                </p>
+                <p>
+                    The exposure timestamp marks assignment for both arms. It is not an opened
+                    invitation, and not a signup.
+                </p>
+            </div>
+
+            <div class="vipps-design-card">
+                <div class="vipps-design-step"><span class="num">3</span><span class="label">When</span></div>
+                <h2>Two waves, one shared cutoff</h2>
+                <div class="vipps-design-stats">
+                    <div class="vipps-design-stat">
+                        <strong>{_n_summer}</strong>
+                        <span>summer wave &middot; 1 Jul – 25 Aug &middot; 16 weeks observed</span>
+                    </div>
+                    <div class="vipps-design-stat">
+                        <strong>{_n_december}</strong>
+                        <span>December wave &middot; 15 – 27 Dec &middot; 5 – 17 days observed</span>
+                    </div>
+                </div>
+                <p style="margin-top:clamp(6px, 0.6974vw, 10px);">
+                    December is right-censored by the 1 January cutoff, so that wave
+                    informs signup rather than retention.
+                </p>
+            </div>
+
+            <div class="vipps-design-card">
+                <div class="vipps-design-step"><span class="num">4</span><span class="label">Outcomes</span></div>
+                <h2>Four things we compare</h2>
+                <ul class="vipps-design-list">
+                    <li><strong>Signup</strong> : enrolled in VIP after exposure</li>
+                    <li><strong>Retention</strong> : purchased in the last 28 days</li>
+                    <li><strong>Engagement</strong> : active-week share, purchases per week</li>
+                    <li><strong>Spend</strong> : GMV per week</li>
+                </ul>
+                <p style="margin-top:6px;">
+                    Measured 4, 8, 12 and 16 weeks after exposure, each with a 95%
+                    confidence interval.
+                </p>
+            </div>
+        </div>
+
+        <div class="vipps-design-bottomline">
+            <strong>NET LIFT</strong>
+            &nbsp; Control users could still join on their own, so the signup gap between
+            arms is a net invitation lift — not a pure take-up rate.
+        </div>
+    </div>
+    """
+
+    mo.Html(experiment_html)
+    return
+
+
+@app.cell(hide_code=True)
+def slide_3():
     _c = D["constants"]
 
     summary_html = f"""
@@ -1179,7 +1438,7 @@ def slide_2():
     </style>
 
     <div class="vipps-summary">
-    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">02<span style="color:#8C8C8C;"> / 11</span></div>
+    <div style="position:absolute;top:16px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">03<span style="color:#8C8C8C;"> / 12</span></div>
         <div class="vipps-summary-accent"></div>
         <div class="vipps-summary-kicker">Executive summary</div>
 
@@ -1260,7 +1519,7 @@ def slide_2():
 
 
 @app.cell(hide_code=True)
-def slide_3():
+def slide_4():
     _c = D["constants"]
     _tx = D["df_tx"]
     if ui_s3_country.value != "All countries":
@@ -1453,7 +1712,7 @@ def slide_3():
                     border-radius:clamp(9.6px, 1.1169vw, 16px);
                     font-family: Inter, Arial, sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">03<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">04<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background: #FF5B24;
@@ -1497,7 +1756,7 @@ def slide_3():
 
 
 @app.cell(hide_code=True)
-def slide_4():
+def slide_5():
     _curve = D["df_silence_curve"].copy()
     _spells = D["df_silence_spells"].copy()
 
@@ -1723,7 +1982,7 @@ def slide_4():
                     Expected frequency
                 </div>
                 <div style="font-size:clamp(7.2px, 0.8372vw, 12px);line-height:1.5;color:#526176;">
-                    Weekly in-person and monthly online activity.
+                    Active week share, Purchase frequency.
                 </div>
             </div>
 
@@ -1735,7 +1994,7 @@ def slide_4():
                     Customer value
                 </div>
                 <div style="font-size:clamp(7.2px, 0.8372vw, 12px);line-height:1.5;color:#526176;">
-                    Purchase frequency and GMV.
+                    GMV.
                 </div>
             </div>
         </div>
@@ -1773,7 +2032,7 @@ def slide_4():
                     border-radius:clamp(9.6px, 1.1169vw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">04<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">05<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -1822,7 +2081,7 @@ def slide_4():
 
 
 @app.cell(hide_code=True)
-def slide_5():
+def slide_6():
     _sel = D["df_sel"]
     _choice = ui_s5_cohort.value
 
@@ -1986,7 +2245,7 @@ def slide_5():
                     background:#FFFAF7;position:relative; padding:clamp(12px, 1.3957vw, 20px) clamp(14.4px, 1.6744vw, 24px) clamp(9.6px, 1.1169vw, 16px);
                     border-radius:clamp(9.6px, 1.1169vw, 16px); font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">05<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">06<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px); background:#FF5B24; border-radius:clamp(6px, 0.5585vw, 8px);
                         margin-bottom:clamp(9.6px, 1.1169vw, 16px);
@@ -2029,7 +2288,7 @@ def slide_5():
 
 
 @app.cell(hide_code=True)
-def slide_6():
+def slide_7():
     _panel = D["df_weekly_panel"]
     _w = ui_s6_window.value
     _choice = ui_s6_cohort.value
@@ -2251,7 +2510,7 @@ def slide_6():
                     padding:clamp(12px, 1.3957vw, 20px) clamp(14.4px, 1.6744vw, 24px) clamp(9.6px, 1.1169vw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">06<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">07<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -2321,8 +2580,6 @@ def slide_6():
                                     <strong style="color:#0B1F3A;">How to read this (N={_n}):</strong>
                                     Each user’s average weekly activity before enrollment
                                     is compared with their average after enrollment.
-                                    The change is an association, not proof that VIP
-                                    caused it, because users choose when to join.
                                 </div>
                             """),
                         ],
@@ -2340,7 +2597,7 @@ def slide_6():
 
 
 @app.cell(hide_code=True)
-def slide_7():
+def slide_8():
     _exp = D["df_exp"]
     _choice = ui_s7_wave.value
 
@@ -2640,7 +2897,7 @@ def slide_7():
                     padding:clamp(12px, 1.3957vw, 20px) clamp(14.4px, 1.6744vw, 24px) clamp(9.6px, 1.1169vw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">07<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">08<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -2762,7 +3019,7 @@ def slide_7():
 
 
 @app.cell(hide_code=True)
-def slide_8():
+def slide_9():
     _exp = D["df_exp"]
     _w = int(ui_s8_window.value)
 
@@ -2990,7 +3247,7 @@ def slide_8():
                     padding:clamp(12px, 1.3957vw, 20px) clamp(14.4px, 1.6744vw, 24px) clamp(9.6px, 1.1169vw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">08<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">09<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -3079,7 +3336,7 @@ def slide_8():
 
 
 @app.cell(hide_code=True)
-def slide_9():
+def slide_10():
     _c = D["constants"]
     _cat = D["df_categories"]
     # Readable labels: online sectors drop the "(Online)" suffix;
@@ -3366,7 +3623,7 @@ def slide_9():
                     padding:clamp(12px, 1.3957vw, 20px) clamp(14.4px, 1.6744vw, 24px) clamp(9.6px, 1.1169vw, 16px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">09<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">10<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -3434,7 +3691,7 @@ def slide_9():
 
 
 @app.cell(hide_code=True)
-def slide_10():
+def slide_11():
     mo.vstack(
         [
             mo.Html("""
@@ -3446,7 +3703,7 @@ def slide_10():
                     padding:clamp(13.2px, 1.5355vw, 22px) clamp(14.4px, 1.6744vw, 24px);
                     font-family:Inter,Arial,sans-serif;
                 ">
-                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">10<span style="color:#8C8C8C;"> / 11</span></div>
+                    <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">11<span style="color:#8C8C8C;"> / 12</span></div>
                     <div style="
                         height:clamp(6px, 0.3492vw, 5px);
                         background:#FF5B24;
@@ -3649,7 +3906,7 @@ def slide_10():
 
 
 @app.cell(hide_code=True)
-def slide_11():
+def slide_12():
     # Appendix: sources, data lineage, and the AI-assisted workflow.
     mo.Html(f"""
         <div style="
@@ -3662,7 +3919,7 @@ def slide_11():
             color:#0B1F3A;
             font-family:Inter,Arial,sans-serif;
         ">
-            <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">11<span style="color:#8C8C8C;"> / 11</span></div>
+            <div style="position:absolute;top:6px;right:22px;font-family:Inter,Arial,sans-serif;font-size:clamp(6.6px, 0.7678vw, 11px);font-weight:800;letter-spacing:1.2px;color:#0B1F3A;">12<span style="color:#8C8C8C;"> / 12</span></div>
             <div style="
                 height:clamp(6px, 0.3492vw, 5px);
                 background:#FF5B24;
@@ -3801,7 +4058,7 @@ def slide_11():
                             Marimo Slides + Altair
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
-            
+    
                         </div>
                     </div>
                 </div>

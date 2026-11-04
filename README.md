@@ -4,7 +4,7 @@ Siddhant's solution to the Vipps VIP loyalty case: does VIP membership create
 lasting loyalty?
 
 
-The repository contains the full analysis notebook, an 11-slide interactive
+The repository contains the full analysis notebook, a 12-slide interactive
 deck, three analytical marts, a documented semantic model, a PNG plot archive,
 and the tests and checks that keep all of it honest. Everything is generated
 from the immutable CSVs in `data/raw/`; no analysis step is manual.
@@ -17,7 +17,7 @@ in place, and `make check` and `make test` pass.
 | Deliverable | Path | What it is |
 |---|---|---|
 | Analysis workbook | [`notebooks/case_analysis.py`](notebooks/case_analysis.py) | EDA, data-quality checks, event study, experiment evaluation, sizing, mart appendix |
-| Interactive deck | [`notebooks/vip_presentation.py`](notebooks/vip_presentation.py) | 11 slides, live widgets, Vipps visual identity |
+| Interactive deck | [`notebooks/vip_presentation.py`](notebooks/vip_presentation.py) | 12 slides, live widgets, Vipps visual identity |
 | Deck PDF | [`vip_presentation.pdf`](vip_presentation.pdf) | 11-page 16:9 export of the deck, default widget settings |
 | Static deck layout | [`notebooks/layouts/vip_presentation.slides.json`](notebooks/layouts/vip_presentation.slides.json) | Slide ordering and per-cell settings |
 | Analytical marts | `data/processed/*.csv` | Generated on every analysis run (git-ignored) |
@@ -85,7 +85,7 @@ data/processed/df_exp_eval.csv         269 experiment users × 22 cols
 data/processed/df_weekly_panel.csv     20,725 user-weeks × 14 cols
       │
       ├──▶ notebooks/case_analysis.py   (EDA → Q1 → Q2 → Q3 → mart appendix)
-      ├──▶ notebooks/vip_presentation.py (11 slides, reads the marts)
+      ├──▶ notebooks/vip_presentation.py (12 slides, reads the marts)
       ├──▶ plots/*.png                   (scripts/export_plots.py)
       └──▶ vip_presentation.pdf          (scripts/export_deck_pdf.py)
 ```
@@ -125,7 +125,7 @@ vipps_da_interview_case/
 │   └── README.md                   # provenance, grain, row counts, columns
 ├── notebooks/
 │   ├── case_analysis.py            # main analysis workbook
-│   ├── vip_presentation.py         # 11-slide deck
+│   ├── vip_presentation.py         # 12-slide deck
 │   ├── data_model.py               # ERD / dictionary viewer
 │   ├── layouts/                    # slides layout for the deck
 │   └── utils/semantic.py           # semantic-model loader and DuckDB builder
@@ -238,7 +238,7 @@ uv run --with playwright --with pillow python scripts/export_deck_pdf.py
 ```
 
 The script executes the notebook to a self-contained HTML file, opens it in
-headless Chromium, walks the 11 slides, and screenshots each slide canvas at
+headless Chromium, walks the 12 slides, and screenshots each slide canvas at
 2690 × 1512 px (the deck's 1345 × 756 design size at 2x), then stitches the
 pages at 200 dpi. Widget controls and reveal's navigation chrome are hidden, so
 each page shows the chart exactly as it appears with the default selections.

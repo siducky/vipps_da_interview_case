@@ -37,7 +37,7 @@ DEFAULT_OUT = ROOT / "vip_presentation.pdf"
 # 1433px window yields the deck's design canvas of 1345x756 CSS px.
 VIEWPORT = {"width": 1433, "height": 1000}
 DEVICE_SCALE = 2
-SLIDES = 11
+SLIDES = 12
 RESOLUTION = 200.0  # dpi used to size the PDF page from the pixels
 
 HIDE_CHROME = """
