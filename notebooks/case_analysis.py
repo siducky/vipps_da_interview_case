@@ -3727,5 +3727,11 @@ def mart_documentation(mo, pd, yaml):
     return
 
 
+@app.cell
+def _(df_weekly_panel):
+    df_weekly_panel
+    return
+
+
 if __name__ == "__main__":
     app.run()

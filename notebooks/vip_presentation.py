@@ -839,20 +839,6 @@ with app.setup(hide_code=True):
         inline=True,
         label="Post-exposure window (weeks)",
     )
-    ui_s8_june_tier = mo.ui.dropdown(
-        options=[
-            "All Summer users (N=226)",
-            "Low June frequency",
-            "Medium June frequency",
-            "High June frequency",
-        ],
-        value="All Summer users (N=226)",
-        label="June frequency block",
-    )
-    ui_s8_scale_late = mo.ui.switch(
-        value=False,
-        label="Scale for actual joiners (divide diff by net signup lift)",
-    )
     ui_s9_extra_online_tx = mo.ui.slider(
         start=0.5,
         stop=4.0,
@@ -1214,7 +1200,7 @@ def slide_2():
                 <ul>
                     <li><strong>Survival:</strong> The user made a purchase in the last <span class="vipps-orange">28</span> days.</li>
                     <li><strong>Cadence:</strong> The user maintains the expected purchase frequency.</li>
-                    <li><strong>Spend:</strong> The user continues to make purchases and generate GMV.</li>
+                    <li><strong>Spend:</strong> The user continues to generate GMV.</li>
                 </ul>
                 <p>
                     Together, these metrics capture whether users remain active,
@@ -2459,10 +2445,7 @@ def slide_7():
 
     # Baseline characteristics
     _bal_rows = []
-    for _col, _label in (
-        ("june_tx_count", "June transactions (selection variable)"),
-        ("pre_tx_per_week", "Pre-exposure purchases / week"),
-    ):
+    for _col, _label in (("june_tx_count", "June transactions (selection variable)"),):
         _iv = _wave.loc[_wave["variant"].eq("invitation"), _col].dropna()
         _ct = _wave.loc[_wave["variant"].eq("control"), _col].dropna()
 
@@ -2708,8 +2691,7 @@ def slide_7():
                                     padding:clamp(6px, 0.1398vw, 2px) clamp(6px, 0.1398vw, 2px)0;
                                 ">
                                     Invited and Control arms had near-identical June
-                                    purchase frequency prior to assignment
-                                    (p = 0.903), confirming balanced randomization.
+                                    purchase frequency prior to assignment, confirming balanced randomization.
                                 </div>
                             """),
                         ],
@@ -2783,19 +2765,8 @@ def slide_7():
 def slide_8():
     _exp = D["df_exp"]
     _w = int(ui_s8_window.value)
-    _tier = ui_s8_june_tier.value
-    _scale_late = bool(ui_s8_scale_late.value)
 
-    _summer = _exp[_exp["experiment_wave"].eq("summer")]
-
-    if _tier == "Low June frequency":
-        _group = _summer[_summer["june_freq_tier"].eq("Low")]
-    elif _tier == "Medium June frequency":
-        _group = _summer[_summer["june_freq_tier"].eq("Medium")]
-    elif _tier == "High June frequency":
-        _group = _summer[_summer["june_freq_tier"].eq("High")]
-    else:
-        _group = _summer
+    _group = _exp[_exp["experiment_wave"].eq("summer")]
 
     _metrics = [
         ("Retained in last 28 days", "retained_last_28d", "share"),
@@ -2805,14 +2776,6 @@ def slide_8():
     ]
 
     _treat = _group["variant"].eq("invitation").to_numpy()
-
-    # Net enrollment lift inside the selected group: the ITT -> complier scaling factor.
-    _net_compliance = float(
-        _group.loc[_treat, "enrolled_post_exposure"].mean()
-        - _group.loc[~_treat, "enrolled_post_exposure"].mean()
-    )
-    _scale = _scale_late and _net_compliance > 0
-    _divisor = _net_compliance if _scale else 1.0
 
     _rows = []
     for _label, _col, _unit in _metrics:
@@ -2836,12 +2799,11 @@ def slide_8():
         _lo = _diff - 1.96 * _se
         _hi = _diff + 1.96 * _se
 
-        # Express difference and confidence interval relative to control average,
-        # then divide by the net signup lift when complier scaling is on.
+        # Express difference and confidence interval relative to control average.
         if _ctl_mean != 0:
-            _diff_pct = _diff / _ctl_mean * 100 / _divisor
-            _lo_pct = _lo / _ctl_mean * 100 / _divisor
-            _hi_pct = _hi / _ctl_mean * 100 / _divisor
+            _diff_pct = _diff / _ctl_mean * 100
+            _lo_pct = _lo / _ctl_mean * 100
+            _hi_pct = _hi / _ctl_mean * 100
         else:
             _diff_pct = _lo_pct = _hi_pct = float("nan")
 
@@ -3012,17 +2974,10 @@ def slide_8():
             "outcome before drawing a conclusion."
         )
 
-    _scale_note = (
-        f" Estimates are complier-scaled by the net enrollment lift "
-        f"(×{1 / _net_compliance:.2f})."
-        if _scale
-        else ""
-    )
-
     mo.vstack(
         [
             mo.hstack(
-                [ui_s8_window, ui_s8_june_tier, ui_s8_scale_late],
+                [ui_s8_window],
                 gap=1.5,
                 align="center",
             ),
@@ -3104,8 +3059,7 @@ def slide_8():
                                         margin-top:clamp(6px, 0.4186vw, 6px);
                                     ">
                                         Points show estimated differences; lines show
-                                        95% confidence intervals.{_scale_note}
-                                        June-frequency groups use pre-experiment activity.
+                                        95% confidence intervals.
                                     </div>
                                 </div>
                             """),
@@ -3844,13 +3798,10 @@ def slide_11():
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Visualization</b> —
-                            Marimo + Altair (Vega-Lite)
+                            Marimo Slides + Altair
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
-                            <b style="color:#0B1F3A;font-weight:750;">Statistical Inference</b>
-                            <code style="font-size:clamp(6.3px, 0.7330vw, 10.5px);color:#0B1F3A;">scipy.stats</code> —
-                            Welch t-test, paired t-test, two-proportion z-test,
-                            complier-scaled ITT
+            
                         </div>
                     </div>
                 </div>
@@ -3878,7 +3829,7 @@ def slide_11():
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Coding &amp; Implementation Model</b> —
-                            DeepSeek V4.1
+                            DeepSeek V4.1 Flash
                         </div>
                         <div style="margin-top:clamp(6px, 0.4186vw, 6px);">
                             <b style="color:#0B1F3A;font-weight:750;">Human-in-the-Loop Governance</b> —
